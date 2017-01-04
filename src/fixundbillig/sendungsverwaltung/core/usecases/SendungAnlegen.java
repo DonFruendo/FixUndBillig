@@ -2,13 +2,14 @@ package fixundbillig.sendungsverwaltung.core.usecases;
 
 import fixundbillig.sendungsverwaltung.core.control.SendungManager;
 import fixundbillig.sendungsverwaltung.core.exceptions.ValidationException;
+import fixundbillig.sendungsverwaltung.data.interfaces.ISendungAnlegen;
 import fixundbillig.sendungsverwaltung.data.packstueck.PackstueckTO;
 import fixundbillig.sendungsverwaltung.data.sendung.DAO_Sendung;
 import fixundbillig.sendungsverwaltung.data.sendung.SendungTO;
 import fixundbillig.sendungsverwaltung.data.utils.Adresse;
 import fixundbillig.sendungsverwaltung.data.utils.Logger;
 
-public class SendungAnlegen {
+public class SendungAnlegen implements ISendungAnlegen {
 
 	public boolean adresseValidieren(Adresse adresse) {
 		return adresse.isValid();
@@ -46,5 +47,4 @@ public class SendungAnlegen {
         // Report success
         return true;
     }
-	
 }
