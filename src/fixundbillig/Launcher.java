@@ -1,12 +1,12 @@
 package fixundbillig;
 
-import fixundbillig.sendungsverwaltung.exceptions.ValidationException;
-import fixundbillig.sendungsverwaltung.sendung.SendungAnlegen;
-import fixundbillig.sendungsverwaltung.to.PackstueckTO;
-import fixundbillig.sendungsverwaltung.to.SendungTO;
-import fixundbillig.sendungsverwaltung.utils.Adresse;
-import fixundbillig.sendungsverwaltung.utils.Logger;
-import fixundbillig.sendungsverwaltung.utils.Paketart;
+import fixundbillig.sendungsverwaltung.core.exceptions.ValidationException;
+import fixundbillig.sendungsverwaltung.core.usecases.SendungAnlegen;
+import fixundbillig.sendungsverwaltung.data.packstueck.PackstueckTO;
+import fixundbillig.sendungsverwaltung.data.sendung.SendungTO;
+import fixundbillig.sendungsverwaltung.data.utils.Adresse;
+import fixundbillig.sendungsverwaltung.data.utils.Logger;
+import fixundbillig.sendungsverwaltung.data.utils.Paketart;
 
 import java.util.ArrayList;
 import java.util.Date;
