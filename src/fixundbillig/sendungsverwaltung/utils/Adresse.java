@@ -14,10 +14,16 @@ public class Adresse {
     }
 
     public boolean isValid() {
+        String regex;
         if(strasse == null || hausnummer == null || plz == null || ort == null) {
             return false;
         }
-        if(!hausnummer.matches("^[1-9]\\d*[a-z]$")) {
+        regex = "^[1-9]\\d*[a-z]{0,1}$";
+        if(!hausnummer.matches(regex)) {
+            return false;
+        }
+        regex = "^([A-z]|[0-9]|[ .-]|[äöüÄÖÜß])+$";
+        if(!strasse.matches(regex) || !ort.matches(regex)) {
             return false;
         }
 

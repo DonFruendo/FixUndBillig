@@ -2,9 +2,10 @@ package fixundbillig.sendungsverwaltung.control;
 
 import fixundbillig.sendungsverwaltung.sendung.Sendung;
 import fixundbillig.sendungsverwaltung.to.SendungTO;
+import fixundbillig.sendungsverwaltung.utils.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Don on 02.01.2017.
@@ -19,29 +20,46 @@ public class SendungManager {
         return ourInstance;
     }
 
-    private List<Sendung> list;
+    private Set<Sendung> sendungen;
 
     private SendungManager() {
-        list = new ArrayList<>();
+        sendungen = new HashSet<>();
     }
 
-    public void sendungAnlegen(SendungTO sendung) {
-        list.add(new Sendung(sendung));
+    public void sendungAnlegen(SendungTO sendungTO) {
+        Sendung sendung = new Sendung(sendungTO);
+        boolean setNotContaining = true;
+        for(Sendung s: sendungen) {
+            if(s.equals(sendung)) {
+                setNotContaining = false;
+                break;
+            }
+        }
+        if(setNotContaining) {
+            sendungen.add(sendung);
+            Logger.log("Added: " + sendung);
+        } else {
+            Logger.log("Exists already: " + sendung);}
     }
 
-    public SendungTO sendungSuchenPerSendungsNr(String sendungsnummer) {
+    public Sendung sendungSuchenPerSendungsNr(String sendungsnummer) {
+        if(sendungsnummer == null) {
+            return null;
+        }
+
         Sendung find = null;
-        for(Sendung sendung : list) {
+        for(Sendung sendung : sendungen) {
             if(sendungsnummer.equals(sendung.getSendungsnummer())) {
                 find = sendung;
                 break;
             }
         }
+        /*
         if(find == null) {
             return null;
-        }
+        } //*/
 
-        return find.toTO();
+        return find;
     }
 
 

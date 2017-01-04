@@ -1,5 +1,6 @@
 package fixundbillig.sendungsverwaltung.control;
 
+import fixundbillig.sendungsverwaltung.dao.db.H2Connector;
 import fixundbillig.sendungsverwaltung.interfaces.ISQLConnector;
 
 public class SQLManager {
@@ -12,7 +13,7 @@ public class SQLManager {
 	}
 	
 	public ISQLConnector getSQLConnector()  {
-		//return new H2Connector();
-		return null;
+		return new H2Connector();
+		//return null;
 	}
 }

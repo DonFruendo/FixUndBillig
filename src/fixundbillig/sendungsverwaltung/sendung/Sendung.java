@@ -9,6 +9,7 @@ import fixundbillig.sendungsverwaltung.utils.Adresse;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Don on 02.01.2017.
@@ -81,5 +82,21 @@ public class Sendung {
 
     public List<Packstueck> getPackstuecke() {
         return packstuecke;
+    }
+
+    @Override
+    public String toString() {
+        return "Sendung{" +
+                "sendungsnummer='" + sendungsnummer + '\'' +
+                ", anlagedatum=" + anlagedatum +
+                ", zielort=" + zielort +
+                ", transportauftrag='" + transportauftrag + '\'' +
+                ", kundenNr='" + kundenNr + '\'' +
+                ", packstuecke=" + packstuecke +
+                '}';
+    }
+
+    public boolean equals(Object other) {
+        return other.getClass() == this.getClass() && Objects.equals(((Sendung) other).getSendungsnummer(), this.sendungsnummer);
     }
 }

@@ -5,6 +5,7 @@ import fixundbillig.sendungsverwaltung.sendung.SendungAnlegen;
 import fixundbillig.sendungsverwaltung.to.PackstueckTO;
 import fixundbillig.sendungsverwaltung.to.SendungTO;
 import fixundbillig.sendungsverwaltung.utils.Adresse;
+import fixundbillig.sendungsverwaltung.utils.Logger;
 import fixundbillig.sendungsverwaltung.utils.Paketart;
 
 import java.util.ArrayList;
@@ -13,9 +14,9 @@ import java.util.List;
 
 public class Launcher {
 	public static void main(String[] args) {
-		log("Hello World!");
+		Logger.log("Hello World!");
 
-		log("Neue Sendung wird angelegt");
+		Logger.log("Neue Sendung wird angelegt");
 		SendungTO sendung = new SendungTO();
 		sendung.anlagedatum = new Date();
 		sendung.kundenNr = "HelloWorld1232";
@@ -24,32 +25,20 @@ public class Launcher {
 		sendung.zielort = new Adresse("Fritz-Wägeler-Str.", "482a", "42567", "Berlin Hafen");
 		List<PackstueckTO> liste = new ArrayList<>();
 		liste.add(new PackstueckTO(10,1, 42, 10, sendung.sendungsnummer, "Kempen", Paketart.Karton));
+		liste.add(new PackstueckTO(100,1, 420, 100, sendung.sendungsnummer+"sadflkj", "Kempenasd", Paketart.Palette));
 		sendung.packstuecke = liste;
 
-		log(sendung + " soll angelegt werden");
+		Logger.log(sendung + " soll angelegt werden");
 
 
 		// TODO Factory
 		SendungAnlegen sendungAnlegen = new SendungAnlegen();
 		try {
 			boolean success = sendungAnlegen.sendungAnlegen(sendung);
-			log("Sendung wurde" + (success?" ":" nicht ") + "erfolgreich angelegt");
+			Logger.log("Sendung wurde" + (success?" ":" nicht ") + "erfolgreich angelegt");
 		} catch (ValidationException e) {
-			err(e.getMessage());
+			Logger.err(e.getMessage());
 		}
 	}
 
-
-	private static void log(Object o) {
-		printToConsole("LOG  ", o);
-	}
-
-	private static void err(Object o) {
-		printToConsole("ERROR", o);
-	}
-
-	private static void printToConsole(String level, Object o) {
-		Date d = new Date();
-		System.out.println("[" + d + "] ["+ level +"] " + o);
-	}
 }

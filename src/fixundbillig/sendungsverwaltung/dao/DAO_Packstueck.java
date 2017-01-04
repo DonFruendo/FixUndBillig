@@ -6,7 +6,9 @@ import fixundbillig.sendungsverwaltung.interfaces.ISQLConnector;
 import fixundbillig.sendungsverwaltung.to.PackstueckTO;
 
 public class DAO_Packstueck implements IDAO_Packstueck {
-	PackstueckTO packstueck;
+	private static final String tabelle = "PACKSTUECK";
+
+	private PackstueckTO packstueck;
 	
 	public DAO_Packstueck(PackstueckTO packstueck) {
 		this.packstueck = packstueck;
@@ -16,7 +18,9 @@ public class DAO_Packstueck implements IDAO_Packstueck {
 		ISQLConnector connector = SQLManager.getInstance().getSQLConnector();
 		connector.connect();
 		// TODO
-		connector.executeStatement("INSERT INTO BLA VALUES('STUFF', 'HOLOLENS')");
+		connector.executeStatement("INSERT INTO " + tabelle + "('ID') VALUES ("
+                + packstueck.id
+                + ");");
 	}
 
 	public void packstueckdatenAendern(PackstueckTO daten) {

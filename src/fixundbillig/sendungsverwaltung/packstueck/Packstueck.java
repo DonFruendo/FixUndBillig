@@ -1,8 +1,11 @@
 package fixundbillig.sendungsverwaltung.packstueck;
 
+import fixundbillig.sendungsverwaltung.control.SendungManager;
 import fixundbillig.sendungsverwaltung.sendung.Sendung;
 import fixundbillig.sendungsverwaltung.to.PackstueckTO;
 import fixundbillig.sendungsverwaltung.utils.Paketart;
+
+import java.util.Objects;
 
 public class Packstueck {
 
@@ -27,7 +30,7 @@ public class Packstueck {
 	}
 	
 	public Packstueck(PackstueckTO packstueck) {
-
+        this(packstueck.volumen, packstueck.id, packstueck.refnr, packstueck.gewicht, SendungManager.getInstance().sendungSuchenPerSendungsNr(packstueck.sendungsnummer), packstueck.lagerort, packstueck.paketart);
 	}
 
     public PackstueckTO toTO() {
@@ -68,5 +71,23 @@ public class Packstueck {
 
     public Paketart getPaketart() {
         return paketart;
+    }
+
+    @Override
+    public String toString() {
+        return "Packstueck{" +
+                "volumen=" + volumen +
+                ", id=" + id +
+                ", refnr=" + refnr +
+                ", gewicht=" + gewicht +
+                ", sendung=" + sendung +
+                ", lagerort='" + lagerort + '\'' +
+                ", paketart=" + paketart +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other.getClass() == this.getClass() && Objects.equals(((Packstueck) other).getId(), this.id);
     }
 }
