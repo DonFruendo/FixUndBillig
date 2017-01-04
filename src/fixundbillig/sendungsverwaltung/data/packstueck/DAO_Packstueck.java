@@ -8,38 +8,41 @@ public class DAO_Packstueck implements IDAO_Packstueck {
 	private static final String tabelle = "PACKSTUECK";
 
 	private PackstueckTO packstueck;
+	private ISQLConnector connector;
 	
 	public DAO_Packstueck(PackstueckTO packstueck) {
 		this.packstueck = packstueck;
+		connector = SQLManager.getInstance().getSQLConnector();
 	}
 
 	public void packstueckdatenAnlegen() {
-		ISQLConnector connector = SQLManager.getInstance().getSQLConnector();
 		connector.connect();
 		// TODO
 		connector.executeStatement("INSERT INTO " + tabelle + "('ID') VALUES ("
                 + packstueck.id
                 + ");");
+		connector.disconnect();
 	}
 
-	public void packstueckdatenAendern(PackstueckTO daten) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void packstueckdatenAendern(PackstueckTO daten) {
 
-	public void packstueckdatenLoeschen() {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	public void packstueckdatenSuchenPerId(int id) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void packstueckdatenLoeschen(int id) {
 
-	public void packstueckdatenSuchenPerRefNr(int refnr) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
+
+    @Override
+    public void packstueckdatenSuchenPerId(int id) {
+
+    }
+
+    @Override
+    public void packstueckdatenSuchenPerRefNr(int refnr) {
+
+    }
+
 
 }

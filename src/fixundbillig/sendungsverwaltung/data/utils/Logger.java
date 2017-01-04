@@ -9,8 +9,8 @@ import java.util.Date;
 public class Logger {
 
 
-    public static void log(Object o) {
-        printToConsole("LOG  ", o);
+    public static void info(Object o) {
+        printToConsole("INFO ", o);
     }
 
     public static void err(Object o) {

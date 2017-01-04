@@ -12,7 +12,7 @@ public class SQLManager {
 		return instance;
 	}
 	
-	public ISQLConnector getSQLConnector()  {
+	public static ISQLConnector getSQLConnector()  {
 		return new H2Connector();
 		//return null;
 	}

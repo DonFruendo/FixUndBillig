@@ -7,7 +7,7 @@ import fixundbillig.sendungsverwaltung.data.sendung.SendungTO;
  * @since 03.01.2017
  */
 public interface IDAO_Sendung {
-    //void sendungsdatenAnlegen();
+    void sendungsdatenAnlegen();
     void sendungsdatenAendern(SendungTO daten);
     void sendungsdatenLoeschen();
     void sendungsdatenSuchenPerId(int id);

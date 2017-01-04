@@ -1,7 +1,8 @@
 package fixundbillig;
 
 import fixundbillig.sendungsverwaltung.core.exceptions.ValidationException;
-import fixundbillig.sendungsverwaltung.core.usecases.SendungAnlegen;
+import fixundbillig.sendungsverwaltung.core.factory.SendungsverwaltungFactory;
+import fixundbillig.sendungsverwaltung.data.interfaces.ISendungAnlegen;
 import fixundbillig.sendungsverwaltung.data.packstueck.PackstueckTO;
 import fixundbillig.sendungsverwaltung.data.sendung.SendungTO;
 import fixundbillig.sendungsverwaltung.data.utils.Adresse;
@@ -14,9 +15,10 @@ import java.util.List;
 
 public class Launcher {
 	public static void main(String[] args) {
-		Logger.log("Hello World!");
+		Logger.info("Hello World!");
+		SendungsverwaltungFactory fact = new SendungsverwaltungFactory();
 
-		Logger.log("Neue Sendung wird angelegt");
+		Logger.info("Neue Sendung wird angelegt");
 		SendungTO sendung = new SendungTO();
 		sendung.anlagedatum = new Date();
 		sendung.kundenNr = "HelloWorld1232";
@@ -28,14 +30,13 @@ public class Launcher {
 		liste.add(new PackstueckTO(100,1, 420, 100, sendung.sendungsnummer+"sadflkj", "Kempenasd", Paketart.Palette));
 		sendung.packstuecke = liste;
 
-		Logger.log(sendung + " soll angelegt werden");
+		Logger.info(sendung + " soll angelegt werden");
 
 
-		// TODO Factory
-		SendungAnlegen sendungAnlegen = new SendungAnlegen();
+		ISendungAnlegen sendungAnlegen = fact.getSendungAnlegen();
 		try {
 			boolean success = sendungAnlegen.sendungAnlegen(sendung);
-			Logger.log("Sendung wurde" + (success?" ":" nicht ") + "erfolgreich angelegt");
+			Logger.info("Sendung wurde" + (success?" ":" nicht ") + "erfolgreich angelegt");
 		} catch (ValidationException e) {
 			Logger.err(e.getMessage());
 		}

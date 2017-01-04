@@ -8,23 +8,25 @@ public class DAO_Sendung implements IDAO_Sendung {
     private static final String tabelle = "SENDUNG";
 
     private SendungTO daten;
+    private ISQLConnector connector;
 
     public DAO_Sendung(SendungTO sendungTO) {
+        connector = SQLManager.getSQLConnector();
         daten = sendungTO;
     }
 
-    public String sendungsdatenAnlegen() {
-        // TODO stuff
-        ISQLConnector connector = SQLManager.getInstance().getSQLConnector();
+    public void sendungsdatenAnlegen() {
         connector.connect();
+
+        // make sure table exists
+        connector.createTableIfNotExisting(tabelle, "sendnr", "kdnnr");
         // TODO
-        String statement = "INSERT INTO BLA('STUFF', 'HOLOLENS') VALUES ("
+        String statement = "INSERT INTO " + tabelle + "('sendnr', 'kdnnr') VALUES ("
                 + daten.sendungsnummer + ", "
                 + daten.kundenNr
                 + ");";
         connector.executeStatement(statement);
-
-        return statement;
+        connector.disconnect();
     }
 
     @Override

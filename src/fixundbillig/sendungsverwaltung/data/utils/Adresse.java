@@ -1,10 +1,10 @@
 package fixundbillig.sendungsverwaltung.data.utils;
 
 public class Adresse {
-    String strasse;
-    String hausnummer;
-    String plz;
-	String ort;
+    private String strasse;
+    private String hausnummer;
+    private String plz;
+	private String ort;
 
     public Adresse(String strasse, String hausnummer, String plz, String ort) {
         this.strasse = strasse;
@@ -18,7 +18,7 @@ public class Adresse {
         if(strasse == null || hausnummer == null || plz == null || ort == null) {
             return false;
         }
-        regex = "^[1-9]\\d*[a-z]{0,1}$";
+        regex = "^[1-9]\\d*[a-z]?$";
         if(!hausnummer.matches(regex)) {
             return false;
         }

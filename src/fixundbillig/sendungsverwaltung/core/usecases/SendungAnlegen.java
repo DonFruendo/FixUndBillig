@@ -20,14 +20,15 @@ public class SendungAnlegen implements ISendungAnlegen {
         DAO_Sendung dao_sendung = new DAO_Sendung(sendung);
 
         // Save DAO
-        String s = dao_sendung.sendungsdatenAnlegen();
-        Logger.log("SQL: " + s);
+        dao_sendung.sendungsdatenAnlegen();
+        //Logger.info("SQL: " + s);
     }
 
 	public boolean sendungAnlegen(SendungTO sendung) throws ValidationException {
 	    // Validate address
 		if(!adresseValidieren(sendung.zielort)) {
-		    throw new ValidationException(sendung.zielort + " hat die Validierung nicht bestanden.");
+		    Logger.err(new ValidationException(sendung.zielort + " hat die Validierung nicht bestanden."));
+		    return false;
         }
 
         // Get the usecase
@@ -40,9 +41,12 @@ public class SendungAnlegen implements ISendungAnlegen {
         // Get the manager
         SendungManager sendungManager = SendungManager.getInstance();
         // Save order to manager
-        sendungManager.sendungAnlegen(sendung);
-        // Save order to DWH
-        sendungsdatenSpeichern(sendung);
+        boolean success = sendungManager.sendungAnlegen(sendung);
+
+        if(success) {
+            // Save order to DWH
+            sendungsdatenSpeichern(sendung);
+        }
 
         // Report success
         return true;

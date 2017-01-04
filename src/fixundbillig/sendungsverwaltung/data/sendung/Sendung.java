@@ -18,7 +18,7 @@ import java.util.Objects;
  */
 public class Sendung {
 
-    private String sendungsnummer;
+    private String sendungsnummer; // TODO Generate
     private Date anlagedatum;
     private Adresse zielort;
     private String transportauftrag;
@@ -38,7 +38,7 @@ public class Sendung {
         List<Packstueck> list = new ArrayList<>();
         PackstueckManager packstueckManager = PackstueckManager.getInstance();
         for(PackstueckTO packstueckTO : packstuecke) {
-            // TODO add order to package
+            // add order to package
             Packstueck packstueck = packstueckManager.getPackstueck(packstueckTO);
             if(packstueck.getSendung() == null) {
                 packstueck.setSendung(this);

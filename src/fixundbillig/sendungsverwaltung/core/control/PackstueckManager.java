@@ -28,7 +28,7 @@ public class PackstueckManager {
     }
 
 
-    public void addPackstueck(PackstueckTO packstueckTO) {
+    public boolean addPackstueck(PackstueckTO packstueckTO) {
         Packstueck packstueck = new Packstueck(packstueckTO);
         boolean setNotContaining = true;
         for(Packstueck p: packstuecke) {
@@ -39,9 +39,11 @@ public class PackstueckManager {
         }
         if(setNotContaining) {
             packstuecke.add(packstueck);
-            Logger.log("Added: " + packstueck);
+            Logger.info("Added: " + packstueck);
+            return true;
         } else {
-            Logger.log("Exists already: " + packstueck);
+            Logger.info("Exists already: " + packstueck);
+            return false;
         }
     }
 

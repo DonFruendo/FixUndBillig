@@ -26,7 +26,7 @@ public class SendungManager {
         sendungen = new HashSet<>();
     }
 
-    public void sendungAnlegen(SendungTO sendungTO) {
+    public boolean sendungAnlegen(SendungTO sendungTO) {
         Sendung sendung = new Sendung(sendungTO);
         boolean setNotContaining = true;
         for(Sendung s: sendungen) {
@@ -37,9 +37,11 @@ public class SendungManager {
         }
         if(setNotContaining) {
             sendungen.add(sendung);
-            Logger.log("Added: " + sendung);
+            Logger.info("Added: " + sendung);
+            return true;
         } else {
-            Logger.log("Exists already: " + sendung);}
+            Logger.info("Exists already: " + sendung);}
+            return false;
     }
 
     public Sendung sendungSuchenPerSendungsNr(String sendungsnummer) {
