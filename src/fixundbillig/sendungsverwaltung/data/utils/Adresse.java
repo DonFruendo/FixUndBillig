@@ -26,6 +26,10 @@ public class Adresse {
         if(!strasse.matches(regex) || !ort.matches(regex)) {
             return false;
         }
+        regex = "^\\d{5}$";
+        if(!plz.matches(regex) || Integer.parseInt(plz) < 1001) {
+            return false;
+        }
 
         return true;
     }
