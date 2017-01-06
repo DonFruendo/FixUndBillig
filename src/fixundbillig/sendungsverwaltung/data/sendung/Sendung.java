@@ -5,8 +5,8 @@ import fixundbillig.sendungsverwaltung.data.packstueck.Packstueck;
 import fixundbillig.sendungsverwaltung.data.packstueck.PackstueckTO;
 import fixundbillig.sendungsverwaltung.data.utils.Adresse;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,7 +19,7 @@ import java.util.Objects;
 public class Sendung {
 
     private String sendungsnummer; // TODO Generate
-    private Date anlagedatum;
+    private LocalDate anlagedatum;
     private Adresse zielort;
     private String transportauftrag;
     private String kundenNr;
@@ -29,7 +29,7 @@ public class Sendung {
         this(sendung.sendungsnummer, sendung.anlagedatum, sendung.zielort, sendung.transportauftrag, sendung.kundenNr, sendung.packstuecke);
     }
 
-    public Sendung(String sendungsnummer, Date anlagedatum, Adresse zielort, String transportauftrag, String kundenNr, List<PackstueckTO> packstuecke) {
+    public Sendung(String sendungsnummer, LocalDate anlagedatum, Adresse zielort, String transportauftrag, String kundenNr, List<PackstueckTO> packstuecke) {
         this.sendungsnummer = sendungsnummer;
         this.anlagedatum = anlagedatum;
         this.zielort = zielort;
@@ -37,6 +37,7 @@ public class Sendung {
         this.kundenNr = kundenNr;
         List<Packstueck> list = new ArrayList<>();
         PackstueckManager packstueckManager = PackstueckManager.getInstance();
+        if(packstuecke != null)
         for(PackstueckTO packstueckTO : packstuecke) {
             // add order to package
             Packstueck packstueck = packstueckManager.getPackstueck(packstueckTO);
@@ -68,7 +69,7 @@ public class Sendung {
         return sendungsnummer;
     }
 
-    public Date getAnlagedatum() {
+    public LocalDate getAnlagedatum() {
         return anlagedatum;
     }
 

@@ -2,40 +2,108 @@ package fixundbillig.sendungsverwaltung.core.db;
 
 import fixundbillig.sendungsverwaltung.data.interfaces.ISQLConnector;
 import fixundbillig.sendungsverwaltung.data.utils.Logger;
+import org.h2.jdbcx.JdbcConnectionPool;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+
 
 public class H2Connector implements ISQLConnector {
+    private static JdbcConnectionPool pool;
+
+    public H2Connector() {
+        connect();
+    }
 
     @Override
     public void connect() {
-        // TODO Establish database connection
-        Logger.info("SQL connect");
+        // Establish database connection
+        try {
+            if (pool == null) {
+                pool = JdbcConnectionPool.create("jdbc:h2:~/fixundbillig", "System", "fublogistik");
+            }
+            Logger.info("SQL connected");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public ResultSet getQuery(String query) {
-        Logger.info("SQL: " + query);
+        try {
+            Connection con = pool.getConnection();
+            ResultSet resultSet = con.createStatement().executeQuery(query);
+            //con.close();
+            Logger.info("SQL Query: " + query);
+            return resultSet;
+
+        } catch (SQLException e) {
+            Logger.err(e.getMessage());
+        }
         return null;
     }
 
     @Override
-    public int executeStatement(String statement) {
-        // TODO Send statement to database
-        Logger.info("SQL: " + statement);
-        return 0;
+    public boolean executeStatement(String statement) {
+        // Execute statement on database
+        try {
+            Connection con = pool.getConnection();
+            boolean execute = con.createStatement().execute(statement);
+            con.close();
+            Logger.info("SQL Statement: " + statement);
+            return execute;
+
+        } catch (SQLException e) {
+            Logger.err(e.getMessage());
+        }
+        return false;
     }
 
     @Override
     public void disconnect() {
-        Logger.info("SQL disconnect");
-
+        if (pool != null) {
+            pool.dispose();
+        }
     }
 
+    /***
+     * Creates a new table with the given {@code name} if it is not existing.
+     * A PRIMARY KEY-constraint will be automatically assigned to the first column.<br>
+     * Syntax: func("Test", "id int", "name varchar(50)", "city string");
+     * @param name the name of the desired table
+     * @param felder names and types of all columns
+     */
     @Override
-    public void createTableIfNotExisting(String tabelle, String... felder) {
-        String statement = "CREATE TABLE IF NOT EXISTS '" + tabelle
-                + ";";
+    public void createTableIfNotExisting(String name, String... felder) {
+        /*CREATE TABLE Packstuek(
+                id INT PRIMARY KEY,
+                volumen INT,
+                refnr INT,
+                gewicht INT,
+                sendungsnummer VARCHAR(50),
+                lagerort VARCHAR(50),
+                paketart VARCHAR(10));*/
+        String statement = "CREATE TABLE IF NOT EXISTS " + name + "(";
+        if (felder.length > 0) {
+            for (int i = 0; i < felder.length; i++) {
+                String[] strings = felder[i].split(" ");
+                if (strings.length == 2) {
+                    String colName = strings[0];
+                    String type = strings[1].toUpperCase();
+
+                    if ("STRING".equals(type)) {
+                        type = "VARCHAR(50)";
+                    }
+
+                    statement += colName + " "
+                            + type
+                            + ((i == 0) ? " PRIMARY KEY" : "")
+                            + ((i < felder.length - 1) ? ", " : "");
+                }
+            }
+        }
+        statement += ");";
         Logger.info("SQL: " + statement);
         executeStatement(statement);
     }

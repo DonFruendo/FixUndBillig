@@ -21,7 +21,6 @@ public class DAO_Packstueck implements IDAO_Packstueck {
 		connector.executeStatement("INSERT INTO " + tabelle + "('ID') VALUES ("
                 + packstueck.id
                 + ");");
-		connector.disconnect();
 	}
 
     @Override

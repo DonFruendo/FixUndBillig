@@ -1,9 +1,12 @@
 package fixundbillig.sendungsverwaltung.core.control;
 
+import fixundbillig.sendungsverwaltung.data.interfaces.ISQLConnector;
+import fixundbillig.sendungsverwaltung.data.sendung.DAO_Sendung;
 import fixundbillig.sendungsverwaltung.data.sendung.Sendung;
 import fixundbillig.sendungsverwaltung.data.sendung.SendungTO;
 import fixundbillig.sendungsverwaltung.data.utils.Logger;
 
+import java.sql.ResultSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +27,21 @@ public class SendungManager {
 
     private SendungManager() {
         sendungen = new HashSet<>();
+        ISQLConnector connector = SQLManager.getSQLConnector();
+        String query = "SELECT ID FROM " + DAO_Sendung.tabelle + ";";
+        ResultSet resultSet = connector.getQuery(query);
+        try {
+            while(resultSet.next()) {
+                String id = resultSet.getString("ID");
+                DAO_Sendung dao = new DAO_Sendung();
+                dao.sendungsdatenSuchenPerId(id);
+                Sendung sendung = new Sendung(dao.toTO());
+                sendungen.add(sendung);
+            }
+            Logger.info("Initialisierung abgeschlossen");
+        } catch (Exception e) {
+            Logger.err(e.getMessage());
+        }
     }
 
     public boolean sendungAnlegen(SendungTO sendungTO) {

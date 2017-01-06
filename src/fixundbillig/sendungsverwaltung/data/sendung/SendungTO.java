@@ -3,12 +3,12 @@ package fixundbillig.sendungsverwaltung.data.sendung;
 import fixundbillig.sendungsverwaltung.data.packstueck.PackstueckTO;
 import fixundbillig.sendungsverwaltung.data.utils.Adresse;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class SendungTO {
 	public String sendungsnummer;
-	public Date anlagedatum;
+	public LocalDate anlagedatum;
 	public Adresse zielort;
 	public String transportauftrag;
 	public String kundenNr;

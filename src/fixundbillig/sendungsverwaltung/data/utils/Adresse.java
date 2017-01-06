@@ -27,11 +27,7 @@ public class Adresse {
             return false;
         }
         regex = "^\\d{5}$";
-        if(!plz.matches(regex) || Integer.parseInt(plz) < 1001) {
-            return false;
-        }
-
-        return true;
+        return !(!plz.matches(regex) || Integer.parseInt(plz) <= 1001);
     }
 
     @Override
@@ -42,5 +38,18 @@ public class Adresse {
                 ", plz='" + plz + '\'' +
                 ", ort='" + ort + '\'' +
                 '}';
+    }
+
+    public String toDB() {
+        return strasse + "/" + hausnummer + "/" + plz + "/" + ort;
+    }
+
+    public static Adresse fromDb(String adresse) {
+        Adresse result = null;
+        String[] split = adresse.split("/");
+        if(split.length == 4) {
+            result = new Adresse(split[0], split[1], split[2], split[3]);
+        }
+        return result;
     }
 }
