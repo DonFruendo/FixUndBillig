@@ -1,0 +1,20 @@
+{
+  "database": {
+    "Sendung": {
+      "id": "ID",
+      "anlagedatum": "anlagedatum",
+      "zielort": "zielort",
+      "transportauftrag": "auftrag",
+      "kundennummer": "kdnnr"
+    },
+    "Packstueck": {
+      "id": "ID",
+      "volumen": "volumen",
+      "gewicht": "gewicht",
+      "refnr": "refnr",
+      "sendungsnummer": "sendnr",
+      "lagerort": "lagerort",
+      "packetart": "art"
+    }
+  }
+}

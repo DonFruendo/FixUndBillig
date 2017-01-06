@@ -26,8 +26,8 @@ public class Launcher {
 		sendung.transportauftrag = "getitthereornot";
 		sendung.zielort = new Adresse("Fritz-Wägeler-Str.", "482a", "42567", "Berlin Hafen");
 		List<PackstueckTO> liste = new ArrayList<>();
-		liste.add(new PackstueckTO(1,10, 42, 10, sendung.sendungsnummer, "Kempen", Paketart.Karton));
-		liste.add(new PackstueckTO(1,100, 420, 100, sendung.sendungsnummer+"sadflkj", "Kempenasd", Paketart.Palette));
+		liste.add(new PackstueckTO(1,10,  10,42, sendung.sendungsnummer, "Kempen", Paketart.Karton));
+		liste.add(new PackstueckTO(1,100, 100, 420, sendung.sendungsnummer+"sadflkj", "Kempenasd", Paketart.Palette));
 		sendung.packstuecke = liste;
 
 		Logger.info(sendung + " soll angelegt werden");

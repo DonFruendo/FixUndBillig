@@ -4,9 +4,9 @@ import fixundbillig.sendungsverwaltung.data.utils.Paketart;
 
 public class PackstueckTO {
 	public int id;
-	public int volumen;
+	public double volumen;
+	public double gewicht;
 	public int refnr;
-	public int gewicht;
 	public String sendungsnummer;
 	public String lagerort;
 	public Paketart paketart;
@@ -14,13 +14,13 @@ public class PackstueckTO {
 	public PackstueckTO() {
     }
 	
-	public PackstueckTO(int id, int volumen, int refnr, int gewicht,
+	public PackstueckTO(int id, int volumen, int gewicht, int refnr,
 			String sendungsnummer, String lagerort, Paketart paketart) {
 		super();
 		this.id = id;
 		this.volumen = volumen;
-		this.refnr = refnr;
 		this.gewicht = gewicht;
+		this.refnr = refnr;
 		this.sendungsnummer = sendungsnummer;
 		this.lagerort = lagerort;
 		this.paketart = paketart;
@@ -29,8 +29,8 @@ public class PackstueckTO {
 	protected PackstueckTO(PackstueckTO other) {
 		this.id = other.id;
 		this.volumen = other.volumen;
-		this.refnr = other.refnr;
 		this.gewicht = other.gewicht;
+		this.refnr = other.refnr;
 		this.sendungsnummer = other.sendungsnummer;
 		this.lagerort = other.lagerort;
 		this.paketart = other.paketart;
@@ -41,8 +41,8 @@ public class PackstueckTO {
 		return "PackstueckTO{" +
 				"id=" + id +
 				", volumen=" + volumen +
-				", refnr=" + refnr +
 				", gewicht=" + gewicht +
+				", refnr=" + refnr +
 				", sendungsnummer=" + sendungsnummer +
 				", lagerort='" + lagerort + '\'' +
 				", paketart=" + paketart +
