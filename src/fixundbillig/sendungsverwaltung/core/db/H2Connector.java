@@ -39,7 +39,7 @@ public class H2Connector implements ISQLConnector {
             Connection con = pool.getConnection();
             ResultSet resultSet = con.createStatement().executeQuery(query);
             //con.close();
-            Logger.info("SQL Query: " + query);
+            Logger.info("Sent SQL Query: " + query);
             return resultSet;
 
         } catch (SQLException e) {
@@ -55,7 +55,7 @@ public class H2Connector implements ISQLConnector {
             Connection con = pool.getConnection();
             boolean execute = con.createStatement().execute(statement);
             con.close();
-            Logger.info("SQL Statement: " + statement);
+            Logger.info("Sent SQL Statement: " + statement);
             return execute;
 
         } catch (SQLException e) {

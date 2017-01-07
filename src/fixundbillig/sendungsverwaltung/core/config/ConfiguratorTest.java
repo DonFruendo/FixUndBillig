@@ -24,6 +24,9 @@ public class ConfiguratorTest {
             Configurator config = gson.fromJson(reader, Configurator.class);
             Logger.info(config);
         }
+
+        Configurator instance = Configurator.getInstance();
+        Logger.info(instance);
     }
 
 }

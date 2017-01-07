@@ -16,22 +16,25 @@ import java.io.Reader;
  * @since 06.01.2017
  */
 public class Configurator {
-    private static Configurator ourInstance = ConfiguratorBuilder();
+    private static Configurator ourInstance;
 
     public static Configurator getInstance() {
+        if(ourInstance == null) {
+            ourInstance = configuratorBuilder();
+        }
         return ourInstance;
     }
 
     public final DB database = null;
 
-    private static Configurator ConfiguratorBuilder() {
+    private static Configurator configuratorBuilder() {
         String path = "bin/fixundbillig/config.json";
         Configurator config = null;
         try (Reader reader = new InputStreamReader(new FileInputStream(path), "UTF-8")) {
             Logger.info(reader);
             Gson gson = new GsonBuilder().create();
             config = gson.fromJson(reader, Configurator.class);
-            //Logger.info(config);
+            Logger.info(config);
         } catch (Exception e) {
             Logger.err(e.getMessage());
         }
@@ -41,11 +44,11 @@ public class Configurator {
 
     // ----------- Configuration classes ------------------
     public static class DB {
-        public final String url = "";
-        public final String user = "";
-        public final String password = "";
-        public final SendungDB Sendung;
-        public final PackstueckDB Packstueck;
+        public String url = "";
+        public String user = "";
+        public String password = "";
+        public SendungDB Sendung;
+        public PackstueckDB Packstueck;
 
         public DB(SendungDB sendung, PackstueckDB packstueck) {
             Sendung = sendung;
@@ -54,11 +57,11 @@ public class Configurator {
     }
 
     public static class SendungDB {
-        public final String id;
-        public final String anlagedatum;
-        public final String zielort;
-        public final String transportauftrag;
-        public final String kundennummer;
+        public String id;
+        public String anlagedatum;
+        public String zielort;
+        public String transportauftrag;
+        public String kundennummer;
 
         public SendungDB(String id, String anlagedatum, String zielort, String transportauftrag, String kundennummer) {
             this.id = id;
@@ -70,13 +73,13 @@ public class Configurator {
     }
 
     public static class PackstueckDB {
-        public final String id;
-        public final String volumen;
-        public final String gewicht;
-        public final String refnr;
-        public final String sendungsnummer;
-        public final String lagerort;
-        public final String paketart;
+        public String id;
+        public String volumen;
+        public String gewicht;
+        public String refnr;
+        public String sendungsnummer;
+        public String lagerort;
+        public String paketart;
 
         public PackstueckDB(String id, String volumen, String gewicht, String refnr, String sendungsnummer, String lagerort, String paketart) {
             this.id = id;
