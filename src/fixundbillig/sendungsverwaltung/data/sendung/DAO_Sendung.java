@@ -13,6 +13,7 @@ import java.time.LocalDate;
 
 public class DAO_Sendung implements IDAO_Sendung {
     public static final String tabelle = "SENDUNG";
+    @SuppressWarnings("ConstantConditions")
     private static final Configurator.SendungDB config = Configurator.getInstance().database.Sendung;
 
     private SendungTO daten;

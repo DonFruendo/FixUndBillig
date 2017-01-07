@@ -11,7 +11,7 @@ public class SendungsverwaltungFactory implements ISendungsverwaltungFactory {
 
 	public SendungsverwaltungFactory() {
 		// load data from database
-        SendungManager.getInstance();
+		SendungManager instance = SendungManager.getInstance();
 	}
 
 	public IPackstueckAnlegen getPackstueckAnlegen() {

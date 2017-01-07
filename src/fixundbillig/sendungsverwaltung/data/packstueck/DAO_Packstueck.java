@@ -12,6 +12,7 @@ import java.sql.SQLException;
 
 public class DAO_Packstueck implements IDAO_Packstueck {
     private static final String tabelle = "PACKSTUECK";
+    @SuppressWarnings("ConstantConditions")
     private static final Configurator.PackstueckDB config = Configurator.getInstance().database.Packstueck;
 
     private PackstueckTO packstueck;
