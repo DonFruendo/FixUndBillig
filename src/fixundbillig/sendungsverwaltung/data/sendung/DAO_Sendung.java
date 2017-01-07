@@ -1,5 +1,6 @@
 package fixundbillig.sendungsverwaltung.data.sendung;
 
+import fixundbillig.sendungsverwaltung.core.config.Configurator;
 import fixundbillig.sendungsverwaltung.core.control.SQLManager;
 import fixundbillig.sendungsverwaltung.data.interfaces.IDAO_Sendung;
 import fixundbillig.sendungsverwaltung.data.interfaces.ISQLConnector;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 
 public class DAO_Sendung implements IDAO_Sendung {
     public static final String tabelle = "SENDUNG";
+    private static final Configurator.SendungDB config = Configurator.getInstance().database.Sendung;
 
     private SendungTO daten;
     private final ISQLConnector connector;
@@ -32,18 +34,19 @@ public class DAO_Sendung implements IDAO_Sendung {
 
         // make sure table exists
         connector.createTableIfNotExisting(tabelle,
-                "id varchar(10)",
-                "anlagedatum date",
-                "zielort string",
-                "transportauftrag string",
-                "kundennummer string");
-        // TODO insert data into table
+                config.id + " varchar(10)",
+                config.anlagedatum + " date",
+                config.zielort + " string",
+                config.transportauftrag + " string",
+                config.kundennummer + " string");
+        // insert data into table
         String statement = "INSERT INTO " + tabelle + "(" +
-                "id, " +
-                "anlagedatum, " +
-                "zielort, " +
-                "transportauftrag, " +
-                "kundennummer) VALUES ("
+                config.id + ", " +
+                config.anlagedatum + ", " +
+                config.zielort + ", " +
+                config.transportauftrag + ", " +
+                config.kundennummer
+                + ") VALUES ("
                 + "'" + daten.sendungsnummer + "', "
                 + "'" + daten.anlagedatum + "', "
                 + "'" + daten.zielort.toDB() + "', "
@@ -51,6 +54,7 @@ public class DAO_Sendung implements IDAO_Sendung {
                 + "'" + daten.kundenNr + "'"
                 + ");";
         connector.executeStatement(statement);
+        Logger.debug(statement);
     }
 
     @Override
@@ -71,11 +75,11 @@ public class DAO_Sendung implements IDAO_Sendung {
         try {
             if(resultSet.next()) {
                 SendungTO to = new SendungTO();
-                to.sendungsnummer = resultSet.getString("ID");
-                to.anlagedatum = LocalDate.parse(resultSet.getString("anlagedatum"));
-                to.zielort = Adresse.fromDb(resultSet.getString("zielort"));
-                to.transportauftrag = resultSet.getString("transportauftrag");
-                to.kundenNr = resultSet.getString("kundennummer");
+                to.sendungsnummer = resultSet.getString(config.id);
+                to.anlagedatum = LocalDate.parse(resultSet.getString(config.anlagedatum));
+                to.zielort = Adresse.fromDb(resultSet.getString(config.zielort));
+                to.transportauftrag = resultSet.getString(config.transportauftrag);
+                to.kundenNr = resultSet.getString(config.kundennummer);
                 daten = to;
             }
         } catch (SQLException e) {

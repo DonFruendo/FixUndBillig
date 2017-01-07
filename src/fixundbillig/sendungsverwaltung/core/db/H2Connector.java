@@ -1,5 +1,6 @@
 package fixundbillig.sendungsverwaltung.core.db;
 
+import fixundbillig.sendungsverwaltung.core.config.Configurator;
 import fixundbillig.sendungsverwaltung.data.interfaces.ISQLConnector;
 import fixundbillig.sendungsverwaltung.data.utils.Logger;
 import org.h2.jdbcx.JdbcConnectionPool;
@@ -12,7 +13,10 @@ import java.sql.SQLException;
 public class H2Connector implements ISQLConnector {
     private static JdbcConnectionPool pool;
 
+    private Configurator.DB config;
+
     public H2Connector() {
+        config = Configurator.getInstance().database;
         connect();
     }
 
@@ -21,11 +25,11 @@ public class H2Connector implements ISQLConnector {
         // Establish database connection
         try {
             if (pool == null) {
-                pool = JdbcConnectionPool.create("jdbc:h2:~/fixundbillig", "System", "fublogistik");
+                pool = JdbcConnectionPool.create(config.url, config.user, config.password);
             }
             Logger.info("SQL connected");
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.err(e.getMessage());
         }
     }
 

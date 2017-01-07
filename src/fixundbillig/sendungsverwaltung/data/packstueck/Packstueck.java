@@ -8,16 +8,16 @@ import java.util.Objects;
 
 public class Packstueck {
 
-    private int volumen;
+    private double volumen;
     private int id;
     private int refnr;
-    private int gewicht;
+    private double gewicht;
     private Sendung sendung;
     private String lagerort;
     private Paketart paketart;
 
 
-	public Packstueck(int volumen, int id, int refnr, int gewicht,
+	public Packstueck(double volumen, int id, int refnr, double gewicht,
                       Sendung sendung, String lagerort, Paketart paketart) {
         this.volumen = volumen;
         this.id = id;
@@ -44,7 +44,7 @@ public class Packstueck {
         return to;
     }
 
-    public int getVolumen() {
+    public double getVolumen() {
         return volumen;
     }
 
@@ -56,7 +56,7 @@ public class Packstueck {
         return refnr;
     }
 
-    public int getGewicht() {
+    public double getGewicht() {
         return gewicht;
     }
 

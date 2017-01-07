@@ -8,6 +8,9 @@ import java.util.Date;
  */
 public class Logger {
 
+    public static void debug(Object o) {
+        printToConsole("DEBUG", o);
+    }
 
     public static void info(Object o) {
         printToConsole("INFO ", o);
