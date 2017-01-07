@@ -17,9 +17,12 @@ import java.util.Set;
  * @since 02.01.2017
  */
 public class SendungManager {
-    private static SendungManager ourInstance = new SendungManager();
+    private static SendungManager ourInstance;
 
     public static SendungManager getInstance() {
+        if(ourInstance == null) {
+            ourInstance = new SendungManager();
+        }
         return ourInstance;
     }
 
@@ -38,7 +41,7 @@ public class SendungManager {
                 Sendung sendung = new Sendung(dao.toTO());
                 sendungen.add(sendung);
             }
-            Logger.info("Initialisierung abgeschlossen");
+            Logger.info("Sendung Initialisierung abgeschlossen");
         } catch (Exception e) {
             Logger.err(e.getMessage());
         }
@@ -74,10 +77,6 @@ public class SendungManager {
                 break;
             }
         }
-        /*
-        if(find == null) {
-            return null;
-        } //*/
 
         return find;
     }

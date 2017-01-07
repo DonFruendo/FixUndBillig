@@ -11,16 +11,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DAO_Packstueck implements IDAO_Packstueck {
-    private static final String tabelle = "PACKSTUECK";
+    public static final String tabelle = "PACKSTUECK";
     @SuppressWarnings("ConstantConditions")
     private static final Configurator.PackstueckDB config = Configurator.getInstance().database.Packstueck;
 
     private PackstueckTO packstueck;
     private ISQLConnector connector;
 
-    public DAO_Packstueck(PackstueckTO packstueck) {
-        this.packstueck = packstueck;
+    public DAO_Packstueck() {
         connector = SQLManager.getSQLConnector();
+    }
+
+    public DAO_Packstueck(PackstueckTO packstueck) {
+        this();
+        this.packstueck = packstueck;
     }
 
     public void packstueckdatenAnlegen() {
@@ -72,7 +76,7 @@ public class DAO_Packstueck implements IDAO_Packstueck {
     @Override
     public void packstueckdatenSuchenPerId(int id) {
         //
-        String query = "SELECT * FORM " + tabelle + " WHERE ID='" + id + "';";
+        String query = "SELECT * FROM " + tabelle + " WHERE ID='" + id + "';";
         ResultSet resultSet = connector.getQuery(query);
         try {
             if (resultSet.next()) {
@@ -96,5 +100,7 @@ public class DAO_Packstueck implements IDAO_Packstueck {
 
     }
 
-
+    public PackstueckTO toTO() {
+        return packstueck;
+    }
 }

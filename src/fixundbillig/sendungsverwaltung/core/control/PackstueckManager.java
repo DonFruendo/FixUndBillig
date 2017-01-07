@@ -1,9 +1,13 @@
 package fixundbillig.sendungsverwaltung.core.control;
 
+import fixundbillig.sendungsverwaltung.data.interfaces.ISQLConnector;
+import fixundbillig.sendungsverwaltung.data.packstueck.DAO_Packstueck;
 import fixundbillig.sendungsverwaltung.data.packstueck.Packstueck;
 import fixundbillig.sendungsverwaltung.data.packstueck.PackstueckTO;
 import fixundbillig.sendungsverwaltung.data.utils.Logger;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,6 +29,27 @@ public class PackstueckManager {
 
     private PackstueckManager() {
         packstuecke = new HashSet<>();
+
+        ISQLConnector connector = SQLManager.getSQLConnector();
+        String query = "SELECT ID FROM " + DAO_Packstueck.tabelle + ";";
+        ResultSet resultSet = connector.getQuery(query);
+        try {
+            ArrayList<DAO_Packstueck> daos = new ArrayList<>();
+            while(resultSet.next()) {
+                int id = resultSet.getInt("ID");
+                PackstueckTO to = new PackstueckTO(id, -1, -1, -1, null, null, null);
+                daos.add(new DAO_Packstueck(to));
+            }
+
+            for(DAO_Packstueck dao : daos) {
+                dao.packstueckdatenSuchenPerId(dao.toTO().id);
+                Packstueck packstueck = new Packstueck(dao.toTO());
+                packstuecke.add(packstueck);
+            }
+            Logger.info("Packstück Initialisierung abgeschlossen");
+        } catch (Exception e) {
+            Logger.err(e.getMessage());
+        }
     }
 
 

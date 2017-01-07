@@ -2,6 +2,8 @@ package fixundbillig.sendungsverwaltung.core.usecases;
 
 import fixundbillig.sendungsverwaltung.core.control.SendungManager;
 import fixundbillig.sendungsverwaltung.core.exceptions.ValidationException;
+import fixundbillig.sendungsverwaltung.core.factory.SendungsverwaltungFactory;
+import fixundbillig.sendungsverwaltung.data.interfaces.IPackstueckAnlegen;
 import fixundbillig.sendungsverwaltung.data.interfaces.ISendungAnlegen;
 import fixundbillig.sendungsverwaltung.data.packstueck.PackstueckTO;
 import fixundbillig.sendungsverwaltung.data.sendung.DAO_Sendung;
@@ -24,7 +26,7 @@ public class SendungAnlegen implements ISendungAnlegen {
         //Logger.info("SQL: " + s);
     }
 
-	public boolean sendungAnlegen(SendungTO sendung) throws ValidationException {
+	public boolean sendungAnlegen(SendungTO sendung) {
 	    // Validate address
 		if(!adresseValidieren(sendung.zielort)) {
 		    Logger.err(new ValidationException(sendung.zielort + " hat die Validierung nicht bestanden."));
@@ -32,7 +34,7 @@ public class SendungAnlegen implements ISendungAnlegen {
         }
 
         // Get the usecase
-        PackstueckAnlegen packstueckAnlegen = new PackstueckAnlegen();
+        IPackstueckAnlegen packstueckAnlegen = new SendungsverwaltungFactory().getPackstueckAnlegen();
 		// Find the package
         for(PackstueckTO packstueck : sendung.packstuecke) {
             // Switch to package-usecase

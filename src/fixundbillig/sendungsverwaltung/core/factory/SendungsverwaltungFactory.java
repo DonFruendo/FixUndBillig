@@ -1,5 +1,6 @@
 package fixundbillig.sendungsverwaltung.core.factory;
 
+import fixundbillig.sendungsverwaltung.core.control.PackstueckManager;
 import fixundbillig.sendungsverwaltung.core.control.SendungManager;
 import fixundbillig.sendungsverwaltung.core.usecases.PackstueckAnlegen;
 import fixundbillig.sendungsverwaltung.core.usecases.SendungAnlegen;
@@ -12,6 +13,7 @@ public class SendungsverwaltungFactory implements ISendungsverwaltungFactory {
 	public SendungsverwaltungFactory() {
 		// load data from database
 		SendungManager instance = SendungManager.getInstance();
+		PackstueckManager packstueckManager = PackstueckManager.getInstance();
 	}
 
 	public IPackstueckAnlegen getPackstueckAnlegen() {
