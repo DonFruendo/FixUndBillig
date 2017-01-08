@@ -20,21 +20,25 @@ public class SendungManager {
     private static SendungManager ourInstance;
 
     public static SendungManager getInstance() {
-        if(ourInstance == null) {
+        if (ourInstance == null) {
             ourInstance = new SendungManager();
         }
         return ourInstance;
     }
 
-    private Set<Sendung> sendungen;
+    private final Set<Sendung> sendungen;
+    private final ISQLConnector connector;
 
     private SendungManager() {
         sendungen = new HashSet<>();
-        ISQLConnector connector = SQLManager.getSQLConnector();
+        connector = SQLManager.getSQLConnector();
+    }
+
+    public void init() {
         String query = "SELECT ID FROM " + DAO_Sendung.tabelle + ";";
         ResultSet resultSet = connector.getQuery(query);
         try {
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 String id = resultSet.getString("ID");
                 DAO_Sendung dao = new DAO_Sendung();
                 dao.sendungsdatenSuchenPerId(id);
@@ -47,32 +51,37 @@ public class SendungManager {
         }
     }
 
+    public void destroy() {
+        connector.disconnect();
+    }
+
     public boolean sendungAnlegen(SendungTO sendungTO) {
         Sendung sendung = new Sendung(sendungTO);
-        boolean setNotContaining = true;
-        for(Sendung s: sendungen) {
-            if(s.equals(sendung)) {
-                setNotContaining = false;
-                break;
+        //boolean setNotContaining = true;
+        for (Sendung s : sendungen) {
+            if (s.equals(sendung)) {
+                boolean updated = s.update(sendung);
+                if (updated) {
+                    Logger.info("Updated: " + sendung);
+                } else {
+                    Logger.info("Exists already: " + sendung);
+                }
+                return updated;
             }
         }
-        if(setNotContaining) {
-            sendungen.add(sendung);
-            Logger.info("Added: " + sendung);
-            return true;
-        } else {
-            Logger.info("Exists already: " + sendung);}
-            return false;
+        sendungen.add(sendung);
+        Logger.info("Added: " + sendung);
+        return true;
     }
 
     public Sendung sendungSuchenPerSendungsNr(String sendungsnummer) {
-        if(sendungsnummer == null) {
+        if (sendungsnummer == null) {
             return null;
         }
 
         Sendung find = null;
-        for(Sendung sendung : sendungen) {
-            if(sendungsnummer.equals(sendung.getSendungsnummer())) {
+        for (Sendung sendung : sendungen) {
+            if (sendungsnummer.equals(sendung.getSendungsnummer())) {
                 find = sendung;
                 break;
             }
@@ -80,7 +89,6 @@ public class SendungManager {
 
         return find;
     }
-
 
 
 }

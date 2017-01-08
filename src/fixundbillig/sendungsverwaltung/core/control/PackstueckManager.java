@@ -19,29 +19,35 @@ import java.util.Set;
  */
 public class PackstueckManager {
 
-    private Set<Packstueck> packstuecke;
+    private final Set<Packstueck> packstuecke;
 
-    private static PackstueckManager ourInstance = new PackstueckManager();
+    private static PackstueckManager ourInstance;
 
     public static PackstueckManager getInstance() {
+        if (ourInstance == null) {
+            ourInstance = new PackstueckManager();
+        }
         return ourInstance;
     }
+    private final ISQLConnector connector;
 
     private PackstueckManager() {
         packstuecke = new HashSet<>();
+        connector = SQLManager.getSQLConnector();
+    }
 
-        ISQLConnector connector = SQLManager.getSQLConnector();
+    public void init() {
         String query = "SELECT ID FROM " + DAO_Packstueck.tabelle + ";";
         ResultSet resultSet = connector.getQuery(query);
         try {
             ArrayList<DAO_Packstueck> daos = new ArrayList<>();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 int id = resultSet.getInt("ID");
                 PackstueckTO to = new PackstueckTO(id, -1, -1, -1, null, null, null);
                 daos.add(new DAO_Packstueck(to));
             }
 
-            for(DAO_Packstueck dao : daos) {
+            for (DAO_Packstueck dao : daos) {
                 dao.packstueckdatenSuchenPerId(dao.toTO().id);
                 Packstueck packstueck = new Packstueck(dao.toTO());
                 packstuecke.add(packstueck);
@@ -52,17 +58,21 @@ public class PackstueckManager {
         }
     }
 
+    public void destroy() {
+        connector.disconnect();
+    }
+
 
     public boolean addPackstueck(PackstueckTO packstueckTO) {
         Packstueck packstueck = new Packstueck(packstueckTO);
         boolean setNotContaining = true;
-        for(Packstueck p: packstuecke) {
-            if(p.equals(packstueck)) {
+        for (Packstueck p : packstuecke) {
+            if (p.equals(packstueck)) {
                 setNotContaining = false;
                 break;
             }
         }
-        if(setNotContaining) {
+        if (setNotContaining) {
             packstuecke.add(packstueck);
             Logger.info("Added: " + packstueck);
             return true;
@@ -74,8 +84,19 @@ public class PackstueckManager {
 
     public Packstueck getPackstueck(PackstueckTO packstueckTO) {
         Packstueck find = null;
-        for(Packstueck packstueck : packstuecke) {
-            if(packstueckTO.id == packstueck.getId()) {
+        for (Packstueck packstueck : packstuecke) {
+            if (packstueckTO.id == packstueck.getId()) {
+                find = packstueck;
+                break;
+            }
+        }
+        return find;
+    }
+
+    public Packstueck getPackstueckPerSendungs(String sendungsnummer) {
+        Packstueck find = null;
+        for (Packstueck packstueck : packstuecke) {
+            if (sendungsnummer.equals(packstueck.getSendung())) {
                 find = packstueck;
                 break;
             }

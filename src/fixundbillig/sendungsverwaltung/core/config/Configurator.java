@@ -15,6 +15,7 @@ import java.io.Reader;
  * @author Don
  * @since 06.01.2017
  */
+@SuppressWarnings("ALL")
 public class Configurator {
     private static Configurator ourInstance;
 
@@ -43,6 +44,7 @@ public class Configurator {
 
 
     // ----------- Configuration classes ------------------
+    @SuppressWarnings("CanBeFinal")
     public static class DB {
         public String url = "";
         public String user = "";
@@ -56,6 +58,7 @@ public class Configurator {
         }
     }
 
+    @SuppressWarnings("CanBeFinal")
     public static class SendungDB {
         public String id;
         public String anlagedatum;
@@ -72,6 +75,7 @@ public class Configurator {
         }
     }
 
+    @SuppressWarnings("CanBeFinal")
     public static class PackstueckDB {
         public String id;
         public String volumen;

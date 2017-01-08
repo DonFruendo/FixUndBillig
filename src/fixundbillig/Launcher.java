@@ -12,10 +12,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Launcher {
+class Launcher {
     public static void main(String[] args) {
         Logger.info("Hello World!");
-        SendungsverwaltungFactory fact = new SendungsverwaltungFactory();
+        SendungsverwaltungFactory fact = SendungsverwaltungFactory.getInstance();
 
         Logger.info("Neue Sendung wird angelegt");
         SendungTO sendung = new SendungTO();
@@ -37,6 +37,16 @@ public class Launcher {
         boolean success = sendungAnlegen.sendungAnlegen(sendung);
         Logger.info("Sendung wurde " + (success ? "erfolgreich" : "nicht") + " angelegt");
 
+        success = sendungAnlegen.sendungAnlegen(sendung);
+        Logger.info("Sendung wurde " + (success ? "erfolgreich" : "nicht") + " angelegt");
+
+        SendungTO sendung1 = new SendungTO(sendung);
+        sendung1.sendungsnummer = "sldk";
+        success = sendungAnlegen.sendungAnlegen(sendung1);
+        Logger.info("Sendung wurde " + (success ? "erfolgreich" : "nicht") + " angelegt");
+
+        fact.destroy();
+        Logger.info("Program complete");
     }
 
 }

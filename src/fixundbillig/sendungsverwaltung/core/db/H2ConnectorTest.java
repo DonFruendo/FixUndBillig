@@ -12,6 +12,7 @@ import java.sql.DriverManager;
  * @author Don
  * @since 07.01.2017
  */
+@SuppressWarnings("ALL")
 public class H2ConnectorTest {
 
     public static void main(String[] args) {
@@ -27,7 +28,7 @@ public class H2ConnectorTest {
             Logger.info("url: " + db.url);
             Logger.info("user: " + db.user);
             Logger.info("password: " + db.password);
-            Connection connection = DriverManager.getConnection(db.url, db.user, db.password);
+            @SuppressWarnings("unused") Connection connection = DriverManager.getConnection(db.url, db.user, db.password);
             Logger.info("Connection successful");
         } catch (Exception e) {
             Logger.err(e.getMessage());

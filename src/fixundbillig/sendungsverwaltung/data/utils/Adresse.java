@@ -1,10 +1,10 @@
 package fixundbillig.sendungsverwaltung.data.utils;
 
 public class Adresse {
-    private String strasse;
-    private String hausnummer;
-    private String plz;
-	private String ort;
+    private final String strasse;
+    private final String hausnummer;
+    private final String plz;
+	private final String ort;
 
     public Adresse(String strasse, String hausnummer, String plz, String ort) {
         this.strasse = strasse;
@@ -51,5 +51,13 @@ public class Adresse {
             result = new Adresse(split[0], split[1], split[2], split[3]);
         }
         return result;
+    }
+
+    public boolean equals(Object o) {
+        if(!(o instanceof  Adresse)) {
+            return false;
+        }
+        Adresse other = (Adresse)o;
+        return this.toDB().equals(other.toDB());
     }
 }

@@ -2,6 +2,7 @@ package fixundbillig.sendungsverwaltung.data.interfaces;
 
 import java.sql.ResultSet;
 
+@SuppressWarnings("ALL")
 public interface ISQLConnector {
 	//Connection getConnection(String url, String user, String password);
 	void connect();

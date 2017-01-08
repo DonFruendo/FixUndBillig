@@ -28,8 +28,8 @@ public class DAO_Sendung implements IDAO_Sendung {
         daten = sendungTO;
     }
 
-    public void sendungsdatenAnlegen(){
-        if(daten == null) {
+    public void sendungsdatenAnlegen() {
+        if (daten == null) {
             return;
         }
 
@@ -40,27 +40,58 @@ public class DAO_Sendung implements IDAO_Sendung {
                 config.zielort + " string",
                 config.transportauftrag + " string",
                 config.kundennummer + " string");
-        // insert data into table
-        String statement = "INSERT INTO " + tabelle + "(" +
-                config.id + ", " +
-                config.anlagedatum + ", " +
-                config.zielort + ", " +
-                config.transportauftrag + ", " +
-                config.kundennummer
-                + ") VALUES ("
-                + "'" + daten.sendungsnummer + "', "
-                + "'" + daten.anlagedatum + "', "
-                + "'" + daten.zielort.toDB() + "', "
-                + "'" + daten.transportauftrag + "', "
-                + "'" + daten.kundenNr + "'"
-                + ");";
-        connector.executeStatement(statement);
-        Logger.debug(statement);
+
+        // check if object is already existing
+        boolean newObject = true;
+        String statement = "SELECT " + config.id + " FROM " + tabelle;
+        ResultSet resultSet = connector.getQuery(statement);
+        try {
+            while (resultSet.next()) {
+                DAO_Sendung tempDAO = new DAO_Sendung();
+                tempDAO.sendungsdatenSuchenPerId(daten.sendungsnummer);
+                Logger.debug(tempDAO);
+                if (tempDAO.toTO().anlagedatum != null) {
+                    // switching to update-case
+                    newObject = false;
+                    sendungsdatenAendern(daten);
+                }
+            }
+        } catch (SQLException e) {
+            Logger.err(e.getMessage());
+        }
+        if (newObject) {
+            // insert data into table
+            statement = "INSERT INTO " + tabelle + "(" +
+                    config.id + ", " +
+                    config.anlagedatum + ", " +
+                    config.zielort + ", " +
+                    config.transportauftrag + ", " +
+                    config.kundennummer
+                    + ") VALUES ("
+                    + "'" + daten.sendungsnummer + "', "
+                    + "'" + daten.anlagedatum + "', "
+                    + "'" + daten.zielort.toDB() + "', "
+                    + "'" + daten.transportauftrag + "', "
+                    + "'" + daten.kundenNr + "'"
+                    + ");";
+            connector.executeStatement(statement);
+            Logger.debug(statement);
+        }
     }
 
     @Override
     public void sendungsdatenAendern(SendungTO daten) {
-
+        // update data in table
+        String statement = "UPDATE " + tabelle + " SET "
+                + config.anlagedatum + "='" + daten.anlagedatum + "', "
+                + config.zielort + "='" + daten.zielort.toDB() + "', "
+                + config.transportauftrag + "='" + daten.transportauftrag + "', "
+                + config.kundennummer + "='" + daten.kundenNr + "'"
+                + " WHERE "
+                + config.id + "='" + daten.sendungsnummer
+                + "';";
+        connector.executeStatement(statement);
+        Logger.debug(statement);
     }
 
     @Override

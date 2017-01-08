@@ -2,6 +2,7 @@ package fixundbillig.sendungsverwaltung.data.packstueck;
 
 import fixundbillig.sendungsverwaltung.data.utils.Paketart;
 
+@SuppressWarnings("ALL")
 public class PackstueckTO {
 	public int id;
 	public double volumen;

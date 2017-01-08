@@ -16,7 +16,7 @@ public class DAO_Packstueck implements IDAO_Packstueck {
     private static final Configurator.PackstueckDB config = Configurator.getInstance().database.Packstueck;
 
     private PackstueckTO packstueck;
-    private ISQLConnector connector;
+    private final ISQLConnector connector;
 
     public DAO_Packstueck() {
         connector = SQLManager.getSQLConnector();

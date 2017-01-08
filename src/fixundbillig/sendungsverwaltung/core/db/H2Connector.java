@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class H2Connector implements ISQLConnector {
     private static JdbcConnectionPool pool;
 
-    private Configurator.DB config;
+    private final Configurator.DB config;
 
     public H2Connector() {
         config = Configurator.getInstance().database;

@@ -26,28 +26,28 @@ public class SendungAnlegen implements ISendungAnlegen {
         //Logger.info("SQL: " + s);
     }
 
-	public boolean sendungAnlegen(SendungTO sendung) {
+	public boolean sendungAnlegen(SendungTO sendungTO) {
 	    // Validate address
-		if(!adresseValidieren(sendung.zielort)) {
-		    Logger.err(new ValidationException(sendung.zielort + " hat die Validierung nicht bestanden."));
+		if(!adresseValidieren(sendungTO.zielort)) {
+		    Logger.err(new ValidationException(sendungTO.zielort + " hat die Validierung nicht bestanden."));
 		    return false;
         }
 
         // Get the usecase
-        IPackstueckAnlegen packstueckAnlegen = new SendungsverwaltungFactory().getPackstueckAnlegen();
+        IPackstueckAnlegen packstueckAnlegen = SendungsverwaltungFactory.getInstance().getPackstueckAnlegen();
 		// Find the package
-        for(PackstueckTO packstueck : sendung.packstuecke) {
+        for(PackstueckTO packstueck : sendungTO.packstuecke) {
             // Switch to package-usecase
             packstueckAnlegen.packstueckAnlegen(packstueck);
         }
         // Get the manager
         SendungManager sendungManager = SendungManager.getInstance();
         // Save order to manager
-        boolean success = sendungManager.sendungAnlegen(sendung);
+        boolean success = sendungManager.sendungAnlegen(sendungTO);
 
         if(success) {
             // Save order to DWH
-            sendungsdatenSpeichern(sendung);
+            sendungsdatenSpeichern(sendungTO);
         }
 
         // Report success

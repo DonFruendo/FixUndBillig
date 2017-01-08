@@ -6,6 +6,7 @@ import fixundbillig.sendungsverwaltung.data.utils.Paketart;
 
 import java.util.Objects;
 
+@SuppressWarnings("ALL")
 public class Packstueck {
 
     private double volumen;
@@ -74,6 +75,30 @@ public class Packstueck {
 
     public void setSendung(Sendung sendung) {
         this.sendung = sendung;
+    }
+
+    public void setVolumen(double volumen) {
+        this.volumen = volumen;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setRefnr(int refnr) {
+        this.refnr = refnr;
+    }
+
+    public void setGewicht(double gewicht) {
+        this.gewicht = gewicht;
+    }
+
+    public void setLagerort(String lagerort) {
+        this.lagerort = lagerort;
+    }
+
+    public void setPaketart(Paketart paketart) {
+        this.paketart = paketart;
     }
 
     @Override

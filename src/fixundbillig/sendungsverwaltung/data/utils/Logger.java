@@ -20,7 +20,7 @@ public class Logger {
         printToConsole("ERROR", o);
     }
 
-    public static void printToConsole(String level, Object o) {
+    private static void printToConsole(String level, Object o) {
         Date d = new Date();
         System.out.println("[" + d + "] ["+ level +"] " + o);
     }
