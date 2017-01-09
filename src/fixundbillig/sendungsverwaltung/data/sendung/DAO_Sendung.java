@@ -1,6 +1,5 @@
 package fixundbillig.sendungsverwaltung.data.sendung;
 
-import fixundbillig.sendungsverwaltung.core.config.Configurator;
 import fixundbillig.sendungsverwaltung.core.control.SQLManager;
 import fixundbillig.sendungsverwaltung.data.interfaces.IDAO_Sendung;
 import fixundbillig.sendungsverwaltung.data.interfaces.ISQLConnector;
@@ -11,10 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import static fixundbillig.sendungsverwaltung.core.control.SendungManager.config;
+import static fixundbillig.sendungsverwaltung.core.control.SendungManager.tabelle;
+
 public class DAO_Sendung implements IDAO_Sendung {
-    public static final String tabelle = "SENDUNG";
-    @SuppressWarnings("ConstantConditions")
-    private static final Configurator.SendungDB config = Configurator.getInstance().database.Sendung;
 
     private SendungTO daten;
     private final ISQLConnector connector;
@@ -33,14 +32,6 @@ public class DAO_Sendung implements IDAO_Sendung {
             return;
         }
 
-        // make sure table exists
-        connector.createTableIfNotExisting(tabelle,
-                config.id + " varchar(10)",
-                config.anlagedatum + " date",
-                config.zielort + " string",
-                config.transportauftrag + " string",
-                config.kundennummer + " string");
-
         // check if object is already existing
         boolean newObject = true;
         String statement = "SELECT " + config.id + " FROM " + tabelle;
@@ -50,7 +41,7 @@ public class DAO_Sendung implements IDAO_Sendung {
                 DAO_Sendung tempDAO = new DAO_Sendung();
                 tempDAO.sendungsdatenSuchenPerId(daten.sendungsnummer);
                 Logger.debug(tempDAO);
-                if (tempDAO.toTO().anlagedatum != null) {
+                if (tempDAO.toTO() != null && tempDAO.toTO().anlagedatum != null) {
                     // switching to update-case
                     newObject = false;
                     sendungsdatenAendern(daten);

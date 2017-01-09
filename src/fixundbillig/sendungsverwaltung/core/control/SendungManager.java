@@ -1,5 +1,6 @@
 package fixundbillig.sendungsverwaltung.core.control;
 
+import fixundbillig.sendungsverwaltung.core.config.Configurator;
 import fixundbillig.sendungsverwaltung.data.interfaces.ISQLConnector;
 import fixundbillig.sendungsverwaltung.data.sendung.DAO_Sendung;
 import fixundbillig.sendungsverwaltung.data.sendung.Sendung;
@@ -26,6 +27,9 @@ public class SendungManager {
         return ourInstance;
     }
 
+    public static final String tabelle = "SENDUNG";
+    @SuppressWarnings("ConstantConditions")
+    public static final Configurator.SendungDB config = Configurator.getInstance().database.Sendung;
     private final Set<Sendung> sendungen;
     private final ISQLConnector connector;
 
@@ -35,7 +39,16 @@ public class SendungManager {
     }
 
     public void init() {
-        String query = "SELECT ID FROM " + DAO_Sendung.tabelle + ";";
+        // make sure table exists
+        connector.createTableIfNotExisting(tabelle,
+                config.id + " varchar(10)",
+                config.anlagedatum + " date",
+                config.zielort + " string",
+                config.transportauftrag + " string",
+                config.kundennummer + " string");
+
+
+        String query = "SELECT ID FROM " + tabelle + ";";
         ResultSet resultSet = connector.getQuery(query);
         try {
             while (resultSet.next()) {
@@ -57,6 +70,11 @@ public class SendungManager {
 
     public boolean sendungAnlegen(SendungTO sendungTO) {
         Sendung sendung = new Sendung(sendungTO);
+
+        // validate sendung
+
+
+
         //boolean setNotContaining = true;
         for (Sendung s : sendungen) {
             if (s.equals(sendung)) {
