@@ -1,5 +1,6 @@
 package fixundbillig.sendungsverwaltung.core.control;
 
+import fixundbillig.sendungsverwaltung.core.config.Configurator;
 import fixundbillig.sendungsverwaltung.data.interfaces.ISQLConnector;
 import fixundbillig.sendungsverwaltung.data.packstueck.DAO_Packstueck;
 import fixundbillig.sendungsverwaltung.data.packstueck.Packstueck;
@@ -9,6 +10,7 @@ import fixundbillig.sendungsverwaltung.data.utils.Logger;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -20,8 +22,11 @@ import java.util.Set;
 public class PackstueckManager {
 
     private final Set<Packstueck> packstuecke;
+    public static final String tabelle = "PACKSTUECK";
 
     private static PackstueckManager ourInstance;
+    @SuppressWarnings("ConstantConditions")
+    public static Configurator.PackstueckDB config = Configurator.getInstance().database.Packstueck;
 
     public static PackstueckManager getInstance() {
         if (ourInstance == null) {
@@ -37,7 +42,17 @@ public class PackstueckManager {
     }
 
     public void init() {
-        String query = "SELECT ID FROM " + DAO_Packstueck.tabelle + ";";
+        // make sure table exists
+        connector.createTableIfNotExisting(tabelle,
+                config.id + " int",
+                config.volumen + " double",
+                config.gewicht + " double",
+                config.refnr + " int",
+                config.sendungsnummer + " string",
+                config.lagerort + " string",
+                config.paketart + " string");
+
+        String query = "SELECT ID FROM " + tabelle + ";";
         ResultSet resultSet = connector.getQuery(query);
         try {
             ArrayList<DAO_Packstueck> daos = new ArrayList<>();
@@ -93,11 +108,15 @@ public class PackstueckManager {
         return find;
     }
 
-    public Packstueck getPackstueckPerSendungs(String sendungsnummer) {
-        Packstueck find = null;
+    public List<Packstueck> getPackstueckePerSendungsnummer(String sendungsnummer) {
+        List<Packstueck> find = new ArrayList<>();
         for (Packstueck packstueck : packstuecke) {
-            if (sendungsnummer.equals(packstueck.getSendung())) {
-                find = packstueck;
+            if(packstueck.getSendung() == null) {
+                continue;
+            }
+            String s = packstueck.getSendung().getSendungsnummer();
+            if (sendungsnummer.equals(s)) {
+                find.add(packstueck);
                 break;
             }
         }

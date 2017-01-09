@@ -1,6 +1,5 @@
 package fixundbillig.sendungsverwaltung.data.packstueck;
 
-import fixundbillig.sendungsverwaltung.core.config.Configurator;
 import fixundbillig.sendungsverwaltung.core.control.SQLManager;
 import fixundbillig.sendungsverwaltung.data.interfaces.IDAO_Packstueck;
 import fixundbillig.sendungsverwaltung.data.interfaces.ISQLConnector;
@@ -10,14 +9,15 @@ import fixundbillig.sendungsverwaltung.data.utils.Paketart;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static fixundbillig.sendungsverwaltung.core.control.PackstueckManager.config;
+import static fixundbillig.sendungsverwaltung.core.control.PackstueckManager.tabelle;
+
 public class DAO_Packstueck implements IDAO_Packstueck {
-    public static final String tabelle = "PACKSTUECK";
-    @SuppressWarnings("ConstantConditions")
-    private static final Configurator.PackstueckDB config = Configurator.getInstance().database.Packstueck;
 
     private PackstueckTO packstueck;
     private final ISQLConnector connector;
 
+    @SuppressWarnings("WeakerAccess")
     public DAO_Packstueck() {
         connector = SQLManager.getSQLConnector();
     }
@@ -32,16 +32,7 @@ public class DAO_Packstueck implements IDAO_Packstueck {
             return;
         }
 
-        // make sure table exists
-        connector.createTableIfNotExisting(tabelle,
-                config.id + " int",
-                config.volumen + " double",
-                config.gewicht + " double",
-                config.refnr + " int",
-                config.sendungsnummer + " string",
-                config.lagerort + " string",
-                config.paketart + " string");
-        // TODO
+        // insert data into database
         String statement = "INSERT INTO " + tabelle + "("
                 + config.id + ", "
                 + config.volumen + ", "

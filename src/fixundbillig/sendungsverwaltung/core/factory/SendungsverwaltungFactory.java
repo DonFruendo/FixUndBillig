@@ -23,12 +23,12 @@ public class SendungsverwaltungFactory implements ISendungsverwaltungFactory {
 
 	private SendungsverwaltungFactory() {
 		// load data from database
-		packstueckManager = PackstueckManager.getInstance();
         sendungManager = SendungManager.getInstance();
+        packstueckManager = PackstueckManager.getInstance();
 
 		// initialise
-        packstueckManager.init();
         sendungManager.init();
+        packstueckManager.init();
     }
 
 	public IPackstueckAnlegen getPackstueckAnlegen() {
@@ -40,7 +40,7 @@ public class SendungsverwaltungFactory implements ISendungsverwaltungFactory {
 
     @Override
     public void destroy() {
-        sendungManager.destroy();
         packstueckManager.destroy();
+        sendungManager.destroy();
     }
 }
