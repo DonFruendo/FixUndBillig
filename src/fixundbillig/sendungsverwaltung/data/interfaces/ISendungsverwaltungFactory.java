@@ -1,6 +1,9 @@
 package fixundbillig.sendungsverwaltung.data.interfaces;
 
+@SuppressWarnings("ALL")
 public interface ISendungsverwaltungFactory {
-	public IPackstueckAnlegen getPackstueckAnlegen();
-	
+	IPackstueckAnlegen getPackstueckAnlegen();
+	ISendungAnlegen getSendungAnlegen();
+
+	void destroy();
 }

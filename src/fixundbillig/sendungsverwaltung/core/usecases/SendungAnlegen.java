@@ -2,6 +2,8 @@ package fixundbillig.sendungsverwaltung.core.usecases;
 
 import fixundbillig.sendungsverwaltung.core.control.SendungManager;
 import fixundbillig.sendungsverwaltung.core.exceptions.ValidationException;
+import fixundbillig.sendungsverwaltung.core.factory.SendungsverwaltungFactory;
+import fixundbillig.sendungsverwaltung.data.interfaces.IPackstueckAnlegen;
 import fixundbillig.sendungsverwaltung.data.interfaces.ISendungAnlegen;
 import fixundbillig.sendungsverwaltung.data.packstueck.PackstueckTO;
 import fixundbillig.sendungsverwaltung.data.sendung.DAO_Sendung;
@@ -20,29 +22,33 @@ public class SendungAnlegen implements ISendungAnlegen {
         DAO_Sendung dao_sendung = new DAO_Sendung(sendung);
 
         // Save DAO
-        String s = dao_sendung.sendungsdatenAnlegen();
-        Logger.log("SQL: " + s);
+        dao_sendung.sendungsdatenAnlegen();
+        //Logger.info("SQL: " + s);
     }
 
-	public boolean sendungAnlegen(SendungTO sendung) throws ValidationException {
+	public boolean sendungAnlegen(SendungTO sendungTO) {
 	    // Validate address
-		if(!adresseValidieren(sendung.zielort)) {
-		    throw new ValidationException(sendung.zielort + " hat die Validierung nicht bestanden.");
+		if(!adresseValidieren(sendungTO.zielort)) {
+		    Logger.err(new ValidationException(sendungTO.zielort + " hat die Validierung nicht bestanden."));
+		    return false;
         }
 
         // Get the usecase
-        PackstueckAnlegen packstueckAnlegen = new PackstueckAnlegen();
+        IPackstueckAnlegen packstueckAnlegen = SendungsverwaltungFactory.getInstance().getPackstueckAnlegen();
 		// Find the package
-        for(PackstueckTO packstueck : sendung.packstuecke) {
+        for(PackstueckTO packstueck : sendungTO.packstuecke) {
             // Switch to package-usecase
             packstueckAnlegen.packstueckAnlegen(packstueck);
         }
         // Get the manager
         SendungManager sendungManager = SendungManager.getInstance();
         // Save order to manager
-        sendungManager.sendungAnlegen(sendung);
-        // Save order to DWH
-        sendungsdatenSpeichern(sendung);
+        boolean success = sendungManager.sendungAnlegen(sendungTO);
+
+        if(success) {
+            // Save order to DWH
+            sendungsdatenSpeichern(sendungTO);
+        }
 
         // Report success
         return true;

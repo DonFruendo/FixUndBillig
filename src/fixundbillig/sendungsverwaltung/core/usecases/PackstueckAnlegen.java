@@ -17,11 +17,13 @@ public class PackstueckAnlegen implements IPackstueckAnlegen {
         // Get the manager
         PackstueckManager pManager = PackstueckManager.getInstance();
 
-        // Save package to the manager
-        pManager.addPackstueck(packstueck);
+		// Save package to the manager
+		boolean success = pManager.addPackstueck(packstueck);
 
-        // Save package to DWH
-		packstueckdatenSpeichern(packstueck);
+		if(success) {
+			// Save package to DWH
+			packstueckdatenSpeichern(packstueck);
+		}
 		
 	}
 	

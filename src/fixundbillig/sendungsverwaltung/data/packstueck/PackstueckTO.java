@@ -2,11 +2,12 @@ package fixundbillig.sendungsverwaltung.data.packstueck;
 
 import fixundbillig.sendungsverwaltung.data.utils.Paketart;
 
+@SuppressWarnings("ALL")
 public class PackstueckTO {
-	public int volumen;
 	public int id;
+	public double volumen;
+	public double gewicht;
 	public int refnr;
-	public int gewicht;
 	public String sendungsnummer;
 	public String lagerort;
 	public Paketart paketart;
@@ -14,23 +15,23 @@ public class PackstueckTO {
 	public PackstueckTO() {
     }
 	
-	public PackstueckTO(int volumen, int id, int refnr, int gewicht,
+	public PackstueckTO(int id, int volumen, int gewicht, int refnr,
 			String sendungsnummer, String lagerort, Paketart paketart) {
 		super();
-		this.volumen = volumen;
 		this.id = id;
-		this.refnr = refnr;
+		this.volumen = volumen;
 		this.gewicht = gewicht;
+		this.refnr = refnr;
 		this.sendungsnummer = sendungsnummer;
 		this.lagerort = lagerort;
 		this.paketart = paketart;
 	}
 	
 	protected PackstueckTO(PackstueckTO other) {
-		this.volumen = other.volumen;
 		this.id = other.id;
-		this.refnr = other.refnr;
+		this.volumen = other.volumen;
 		this.gewicht = other.gewicht;
+		this.refnr = other.refnr;
 		this.sendungsnummer = other.sendungsnummer;
 		this.lagerort = other.lagerort;
 		this.paketart = other.paketart;
@@ -39,10 +40,10 @@ public class PackstueckTO {
 	@Override
 	public String toString() {
 		return "PackstueckTO{" +
-				"volumen=" + volumen +
-				", id=" + id +
-				", refnr=" + refnr +
+				"id=" + id +
+				", volumen=" + volumen +
 				", gewicht=" + gewicht +
+				", refnr=" + refnr +
 				", sendungsnummer=" + sendungsnummer +
 				", lagerort='" + lagerort + '\'' +
 				", paketart=" + paketart +

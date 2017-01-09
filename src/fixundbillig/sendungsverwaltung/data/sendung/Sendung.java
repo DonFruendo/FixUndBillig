@@ -5,8 +5,8 @@ import fixundbillig.sendungsverwaltung.data.packstueck.Packstueck;
 import fixundbillig.sendungsverwaltung.data.packstueck.PackstueckTO;
 import fixundbillig.sendungsverwaltung.data.utils.Adresse;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,36 +16,65 @@ import java.util.Objects;
  * @author Don
  * @since 02.01.2017
  */
+@SuppressWarnings("ALL")
 public class Sendung {
 
-    private String sendungsnummer;
-    private Date anlagedatum;
+    private String sendungsnummer; // TODO Generate
+    private LocalDate anlagedatum;
     private Adresse zielort;
     private String transportauftrag;
     private String kundenNr;
-    private List<Packstueck> packstuecke;
+    //private List<Packstueck> packstuecke;
 
     public Sendung(SendungTO sendung) {
         this(sendung.sendungsnummer, sendung.anlagedatum, sendung.zielort, sendung.transportauftrag, sendung.kundenNr, sendung.packstuecke);
     }
 
-    public Sendung(String sendungsnummer, Date anlagedatum, Adresse zielort, String transportauftrag, String kundenNr, List<PackstueckTO> packstuecke) {
+    public Sendung(String sendungsnummer, LocalDate anlagedatum, Adresse zielort, String transportauftrag, String kundenNr, List<PackstueckTO> packstuecke) {
         this.sendungsnummer = sendungsnummer;
         this.anlagedatum = anlagedatum;
         this.zielort = zielort;
         this.transportauftrag = transportauftrag;
         this.kundenNr = kundenNr;
+        /*
         List<Packstueck> list = new ArrayList<>();
         PackstueckManager packstueckManager = PackstueckManager.getInstance();
-        for(PackstueckTO packstueckTO : packstuecke) {
-            // TODO add order to package
-            Packstueck packstueck = packstueckManager.getPackstueck(packstueckTO);
-            if(packstueck.getSendung() == null) {
-                packstueck.setSendung(this);
+        if(packstuecke != null) {
+            for (PackstueckTO packstueckTO : packstuecke) {
+                // add order to package
+                Packstueck packstueck = packstueckManager.getPackstueck(packstueckTO);
+                if (packstueck.getSendung() == null) {
+                    packstueck.setSendung(this);
+                } // TO DO list not contains
+                if(!list.contains(packstueck))
+                    list.add(packstueck);
             }
-            list.add(packstueck);
         }
-        this.packstuecke = list;
+        this.packstuecke = list; //*/
+    }
+
+    public boolean update(String sendungsnummer, LocalDate anlagedatum, Adresse zielort, String transportauftrag, String kundenNr, List<Packstueck> packstuecke) {
+        boolean result = false;
+
+        if(!this.sendungsnummer.equals(sendungsnummer)) result = true;
+        if(!this.anlagedatum.equals(anlagedatum)) result = true;
+        if(!this.zielort.equals(zielort)) result = true;
+        if(!this.transportauftrag.equals(transportauftrag)) result = true;
+        if(!this.kundenNr.equals(kundenNr)) result = true;
+        //if(!this.packstuecke.containsAll(packstuecke) || !packstuecke.containsAll(this.packstuecke)) result = true;
+
+        this.sendungsnummer = sendungsnummer;
+        this.anlagedatum = anlagedatum;
+        this.zielort = zielort;
+        this.transportauftrag = transportauftrag;
+        this.kundenNr = kundenNr;
+        //this.packstuecke = packstuecke;
+
+        return result;
+    }
+
+    public boolean update(Sendung sendung) {
+        return update(sendung.getSendungsnummer(), sendung.getAnlagedatum(), sendung.getZielort(), sendung.getTransportauftrag(), sendung.getKundenNr(), sendung.getPackstuecke());
     }
 
     public SendungTO toTO() {
@@ -55,11 +84,12 @@ public class Sendung {
         to.zielort = zielort;
         to.transportauftrag = transportauftrag;
         to.kundenNr = kundenNr;
+        /*
         List<PackstueckTO> list = new ArrayList<>();
         for(Packstueck packstueck : packstuecke) {
             list.add(packstueck.toTO());
         }
-        to.packstuecke = list;
+        to.packstuecke = list;//*/
 
         return to;
     }
@@ -68,7 +98,7 @@ public class Sendung {
         return sendungsnummer;
     }
 
-    public Date getAnlagedatum() {
+    public LocalDate getAnlagedatum() {
         return anlagedatum;
     }
 
@@ -85,8 +115,40 @@ public class Sendung {
     }
 
     public List<Packstueck> getPackstuecke() {
-        return packstuecke;
+        List<Packstueck> result = new ArrayList<>();
+
+        PackstueckManager packstueckManager = PackstueckManager.getInstance();
+        List<Packstueck> packstuecke = packstueckManager.getPackstueckePerSendungsnummer(this.sendungsnummer);
+        if(packstuecke != null) {
+            result.addAll(packstuecke);
+        }
+        return result;
     }
+
+    public void setSendungsnummer(String sendungsnummer) {
+        this.sendungsnummer = sendungsnummer;
+    }
+
+    public void setAnlagedatum(LocalDate anlagedatum) {
+        this.anlagedatum = anlagedatum;
+    }
+
+    public void setZielort(Adresse zielort) {
+        this.zielort = zielort;
+    }
+
+    public void setTransportauftrag(String transportauftrag) {
+        this.transportauftrag = transportauftrag;
+    }
+
+    public void setKundenNr(String kundenNr) {
+        this.kundenNr = kundenNr;
+    }
+
+    /*
+    public void setPackstuecke(List<Packstueck> packstuecke) {
+        this.packstuecke = packstuecke;
+    }//*/
 
     @Override
     public String toString() {
@@ -96,7 +158,7 @@ public class Sendung {
                 ", zielort=" + zielort +
                 ", transportauftrag='" + transportauftrag + '\'' +
                 ", kundenNr='" + kundenNr + '\'' +
-                ", packstuecke=" + packstuecke +
+                ", packstuecke=" + getPackstuecke() +
                 '}';
     }
 

@@ -3,43 +3,95 @@ package fixundbillig.sendungsverwaltung.data.packstueck;
 import fixundbillig.sendungsverwaltung.core.control.SQLManager;
 import fixundbillig.sendungsverwaltung.data.interfaces.IDAO_Packstueck;
 import fixundbillig.sendungsverwaltung.data.interfaces.ISQLConnector;
+import fixundbillig.sendungsverwaltung.data.utils.Logger;
+import fixundbillig.sendungsverwaltung.data.utils.Paketart;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import static fixundbillig.sendungsverwaltung.core.control.PackstueckManager.config;
+import static fixundbillig.sendungsverwaltung.core.control.PackstueckManager.tabelle;
 
 public class DAO_Packstueck implements IDAO_Packstueck {
-	private static final String tabelle = "PACKSTUECK";
 
-	private PackstueckTO packstueck;
-	
-	public DAO_Packstueck(PackstueckTO packstueck) {
-		this.packstueck = packstueck;
-	}
+    private PackstueckTO packstueck;
+    private final ISQLConnector connector;
 
-	public void packstueckdatenAnlegen() {
-		ISQLConnector connector = SQLManager.getInstance().getSQLConnector();
-		connector.connect();
-		// TODO
-		connector.executeStatement("INSERT INTO " + tabelle + "('ID') VALUES ("
-                + packstueck.id
-                + ");");
-	}
+    @SuppressWarnings("WeakerAccess")
+    public DAO_Packstueck() {
+        connector = SQLManager.getSQLConnector();
+    }
 
-	public void packstueckdatenAendern(PackstueckTO daten) {
-		// TODO Auto-generated method stub
-		
-	}
+    public DAO_Packstueck(PackstueckTO packstueck) {
+        this();
+        this.packstueck = packstueck;
+    }
 
-	public void packstueckdatenLoeschen() {
-		// TODO Auto-generated method stub
-		
-	}
+    public void packstueckdatenAnlegen() {
+        if(packstueck == null) {
+            return;
+        }
 
-	public void packstueckdatenSuchenPerId(int id) {
-		// TODO Auto-generated method stub
-		
-	}
+        // insert data into database
+        String statement = "INSERT INTO " + tabelle + "("
+                + config.id + ", "
+                + config.volumen + ", "
+                + config.gewicht + ", "
+                + config.refnr + ", "
+                + config.sendungsnummer + ", "
+                + config.lagerort + ", "
+                + config.paketart
+                + ") VALUES ("
+                + "'" + packstueck.id + "', "
+                + "'" + packstueck.volumen + "', "
+                + "'" + packstueck.gewicht + "', "
+                + "'" + packstueck.refnr + "', "
+                + "'" + packstueck.sendungsnummer + "', "
+                + "'" + packstueck.lagerort + "', "
+                + "'" + packstueck.paketart + "'"
+                + ");";
+        connector.executeStatement(statement);
+        Logger.debug("SQL DEBUG: " + statement);
+    }
 
-	public void packstueckdatenSuchenPerRefNr(int refnr) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void packstueckdatenAendern(PackstueckTO daten) {
 
+    }
+
+    @Override
+    public void packstueckdatenLoeschen(int id) {
+
+    }
+
+    @Override
+    public void packstueckdatenSuchenPerId(int id) {
+        //
+        String query = "SELECT * FROM " + tabelle + " WHERE ID='" + id + "';";
+        ResultSet resultSet = connector.getQuery(query);
+        try {
+            if (resultSet.next()) {
+                PackstueckTO to = new PackstueckTO();
+                to.id = resultSet.getInt(config.id);
+                to.volumen = resultSet.getDouble(config.volumen);
+                to.gewicht = resultSet.getDouble(config.gewicht);
+                to.refnr = resultSet.getInt(config.refnr);
+                to.sendungsnummer = resultSet.getString(config.sendungsnummer);
+                to.lagerort = resultSet.getString(config.lagerort);
+                to.paketart = Paketart.valueOf(resultSet.getString(config.paketart));
+                packstueck = to;
+            }
+        } catch (SQLException e) {
+            Logger.err(e.getMessage());
+        }
+    }
+
+    @Override
+    public void packstueckdatenSuchenPerRefNr(int refnr) {
+
+    }
+
+    public PackstueckTO toTO() {
+        return packstueck;
+    }
 }

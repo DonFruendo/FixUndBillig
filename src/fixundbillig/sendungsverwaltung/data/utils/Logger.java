@@ -8,16 +8,19 @@ import java.util.Date;
  */
 public class Logger {
 
+    public static void debug(Object o) {
+        printToConsole("DEBUG", o);
+    }
 
-    public static void log(Object o) {
-        printToConsole("LOG  ", o);
+    public static void info(Object o) {
+        printToConsole("INFO ", o);
     }
 
     public static void err(Object o) {
         printToConsole("ERROR", o);
     }
 
-    public static void printToConsole(String level, Object o) {
+    private static void printToConsole(String level, Object o) {
         Date d = new Date();
         System.out.println("[" + d + "] ["+ level +"] " + o);
     }

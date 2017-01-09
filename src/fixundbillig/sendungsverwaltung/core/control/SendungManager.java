@@ -1,9 +1,13 @@
 package fixundbillig.sendungsverwaltung.core.control;
 
+import fixundbillig.sendungsverwaltung.core.config.Configurator;
+import fixundbillig.sendungsverwaltung.data.interfaces.ISQLConnector;
+import fixundbillig.sendungsverwaltung.data.sendung.DAO_Sendung;
 import fixundbillig.sendungsverwaltung.data.sendung.Sendung;
 import fixundbillig.sendungsverwaltung.data.sendung.SendungTO;
 import fixundbillig.sendungsverwaltung.data.utils.Logger;
 
+import java.sql.ResultSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,54 +18,95 @@ import java.util.Set;
  * @since 02.01.2017
  */
 public class SendungManager {
-    private static SendungManager ourInstance = new SendungManager();
+    private static SendungManager ourInstance;
 
     public static SendungManager getInstance() {
+        if (ourInstance == null) {
+            ourInstance = new SendungManager();
+        }
         return ourInstance;
     }
 
-    private Set<Sendung> sendungen;
+    public static final String tabelle = "SENDUNG";
+    @SuppressWarnings("ConstantConditions")
+    public static final Configurator.SendungDB config = Configurator.getInstance().database.Sendung;
+    private final Set<Sendung> sendungen;
+    private final ISQLConnector connector;
 
     private SendungManager() {
         sendungen = new HashSet<>();
+        connector = SQLManager.getSQLConnector();
     }
 
-    public void sendungAnlegen(SendungTO sendungTO) {
+    public void init() {
+        // make sure table exists
+        connector.createTableIfNotExisting(tabelle,
+                config.id + " varchar(10)",
+                config.anlagedatum + " date",
+                config.zielort + " string",
+                config.transportauftrag + " string",
+                config.kundennummer + " string");
+
+
+        String query = "SELECT ID FROM " + tabelle + ";";
+        ResultSet resultSet = connector.getQuery(query);
+        try {
+            while (resultSet.next()) {
+                String id = resultSet.getString("ID");
+                DAO_Sendung dao = new DAO_Sendung();
+                dao.sendungsdatenSuchenPerId(id);
+                Sendung sendung = new Sendung(dao.toTO());
+                sendungen.add(sendung);
+            }
+            Logger.info("Sendung Initialisierung abgeschlossen");
+        } catch (Exception e) {
+            Logger.err(e.getMessage());
+        }
+    }
+
+    public void destroy() {
+        connector.disconnect();
+    }
+
+    public boolean sendungAnlegen(SendungTO sendungTO) {
         Sendung sendung = new Sendung(sendungTO);
-        boolean setNotContaining = true;
-        for(Sendung s: sendungen) {
-            if(s.equals(sendung)) {
-                setNotContaining = false;
-                break;
+
+        // validate sendung
+
+
+
+        //boolean setNotContaining = true;
+        for (Sendung s : sendungen) {
+            if (s.equals(sendung)) {
+                boolean updated = s.update(sendung);
+                if (updated) {
+                    Logger.info("Updated: " + sendung);
+                } else {
+                    Logger.info("Exists already: " + sendung);
+                }
+                return updated;
             }
         }
-        if(setNotContaining) {
-            sendungen.add(sendung);
-            Logger.log("Added: " + sendung);
-        } else {
-            Logger.log("Exists already: " + sendung);}
+        sendungen.add(sendung);
+        Logger.info("Added: " + sendung);
+        return true;
     }
 
     public Sendung sendungSuchenPerSendungsNr(String sendungsnummer) {
-        if(sendungsnummer == null) {
+        if (sendungsnummer == null) {
             return null;
         }
 
         Sendung find = null;
-        for(Sendung sendung : sendungen) {
-            if(sendungsnummer.equals(sendung.getSendungsnummer())) {
+        for (Sendung sendung : sendungen) {
+            if (sendungsnummer.equals(sendung.getSendungsnummer())) {
                 find = sendung;
                 break;
             }
         }
-        /*
-        if(find == null) {
-            return null;
-        } //*/
 
         return find;
     }
-
 
 
 }

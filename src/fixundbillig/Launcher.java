@@ -1,44 +1,52 @@
 package fixundbillig;
 
-import fixundbillig.sendungsverwaltung.core.exceptions.ValidationException;
-import fixundbillig.sendungsverwaltung.core.usecases.SendungAnlegen;
+import fixundbillig.sendungsverwaltung.core.factory.SendungsverwaltungFactory;
+import fixundbillig.sendungsverwaltung.data.interfaces.ISendungAnlegen;
 import fixundbillig.sendungsverwaltung.data.packstueck.PackstueckTO;
 import fixundbillig.sendungsverwaltung.data.sendung.SendungTO;
 import fixundbillig.sendungsverwaltung.data.utils.Adresse;
 import fixundbillig.sendungsverwaltung.data.utils.Logger;
 import fixundbillig.sendungsverwaltung.data.utils.Paketart;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class Launcher {
-	public static void main(String[] args) {
-		Logger.log("Hello World!");
+class Launcher {
+    public static void main(String[] args) {
+        Logger.info("Hello World!");
+        SendungsverwaltungFactory fact = SendungsverwaltungFactory.getInstance();
 
-		Logger.log("Neue Sendung wird angelegt");
-		SendungTO sendung = new SendungTO();
-		sendung.anlagedatum = new Date();
-		sendung.kundenNr = "HelloWorld1232";
-		sendung.sendungsnummer = "blabla44";
-		sendung.transportauftrag = "getitthereornot";
-		sendung.zielort = new Adresse("Fritz-Wägeler-Str.", "482a", "42567", "Berlin Hafen");
-		List<PackstueckTO> liste = new ArrayList<>();
-		liste.add(new PackstueckTO(10,1, 42, 10, sendung.sendungsnummer, "Kempen", Paketart.Karton));
-		liste.add(new PackstueckTO(100,1, 420, 100, sendung.sendungsnummer+"sadflkj", "Kempenasd", Paketart.Palette));
-		sendung.packstuecke = liste;
+        Logger.info("Neue Sendung wird angelegt");
+        SendungTO sendung = new SendungTO();
+        sendung.anlagedatum = LocalDate.now();
+        sendung.kundenNr = "HelloWorld1232";
+        sendung.sendungsnummer = "blabla44";
+        sendung.transportauftrag = "getitthereornot";
+        sendung.zielort = new Adresse("Fritz-Wägeler-Str.", "482a", "42567", "Berlin Hafen");
+        List<PackstueckTO> liste = new ArrayList<>();
+        liste.add(new PackstueckTO(1, 10, 10, 42, sendung.sendungsnummer, "Kempen", Paketart.Karton));
+        liste.add(new PackstueckTO(1, 100, 100, 420, sendung.sendungsnummer + "sadflkj", "Kempenasd", Paketart.Palette));
+        sendung.packstuecke = liste;
 
-		Logger.log(sendung + " soll angelegt werden");
+        Logger.info(sendung + " soll angelegt werden");
 
 
-		// TODO Factory
-		SendungAnlegen sendungAnlegen = new SendungAnlegen();
-		try {
-			boolean success = sendungAnlegen.sendungAnlegen(sendung);
-			Logger.log("Sendung wurde" + (success?" ":" nicht ") + "erfolgreich angelegt");
-		} catch (ValidationException e) {
-			Logger.err(e.getMessage());
-		}
-	}
+        ISendungAnlegen sendungAnlegen = fact.getSendungAnlegen();
+
+        boolean success = sendungAnlegen.sendungAnlegen(sendung);
+        Logger.info("Sendung wurde " + (success ? "erfolgreich" : "nicht") + " angelegt");
+
+        success = sendungAnlegen.sendungAnlegen(sendung);
+        Logger.info("Sendung wurde " + (success ? "erfolgreich" : "nicht") + " angelegt");
+
+        SendungTO sendung1 = new SendungTO(sendung);
+        sendung1.sendungsnummer = "sldk";
+        success = sendungAnlegen.sendungAnlegen(sendung1);
+        Logger.info("Sendung wurde " + (success ? "erfolgreich" : "nicht") + " angelegt");
+
+        fact.destroy();
+        Logger.info("Program complete");
+    }
 
 }
