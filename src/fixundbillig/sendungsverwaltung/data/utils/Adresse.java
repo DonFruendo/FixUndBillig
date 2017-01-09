@@ -60,4 +60,20 @@ public class Adresse {
         Adresse other = (Adresse)o;
         return this.toDB().equals(other.toDB());
     }
+
+    public String getStrasse() {
+        return strasse;
+    }
+
+    public String getHausnummer() {
+        return hausnummer;
+    }
+
+    public String getPlz() {
+        return plz;
+    }
+
+    public String getOrt() {
+        return ort;
+    }
 }
