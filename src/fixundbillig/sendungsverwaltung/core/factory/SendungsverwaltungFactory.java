@@ -4,6 +4,7 @@ import fixundbillig.sendungsverwaltung.core.control.PackstueckManager;
 import fixundbillig.sendungsverwaltung.core.control.SendungManager;
 import fixundbillig.sendungsverwaltung.core.usecases.PackstueckAnlegen;
 import fixundbillig.sendungsverwaltung.core.usecases.SendungAnlegen;
+import fixundbillig.sendungsverwaltung.core.usecases.SendungSuchen;
 import fixundbillig.sendungsverwaltung.data.interfaces.IPackstueckAnlegen;
 import fixundbillig.sendungsverwaltung.data.interfaces.ISendungAnlegen;
 import fixundbillig.sendungsverwaltung.data.interfaces.ISendungsverwaltungFactory;
@@ -36,6 +37,9 @@ public class SendungsverwaltungFactory implements ISendungsverwaltungFactory {
 	}
 	public ISendungAnlegen getSendungAnlegen() {
 	    return new SendungAnlegen();
+    }
+    public SendungSuchen getSendungSuchen() {
+	    return new SendungSuchen();
     }
 
     @Override
