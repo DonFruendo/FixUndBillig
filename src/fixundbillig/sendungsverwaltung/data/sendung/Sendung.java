@@ -25,6 +25,7 @@ public class Sendung {
     private String transportauftrag;
     private String kundenNr;
 
+
     public Sendung(SendungTO sendung) {
         this(sendung.sendungsnummer, sendung.anlagedatum, sendung.zielort, sendung.transportauftrag, sendung.kundenNr);
     }

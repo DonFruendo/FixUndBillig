@@ -1,5 +1,6 @@
 package fixundbillig;
 
+import fixundbillig.sendungsverwaltung.core.control.SendungManager;
 import fixundbillig.sendungsverwaltung.core.factory.SendungsverwaltungFactory;
 import fixundbillig.sendungsverwaltung.data.interfaces.ISendungAnlegen;
 import fixundbillig.sendungsverwaltung.data.packstueck.PackstueckTO;
@@ -44,6 +45,12 @@ class Launcher {
         sendung1.sendungsnummer = "sldk";
         success = sendungAnlegen.sendungAnlegen(sendung1);
         Logger.info("Sendung wurde " + (success ? "erfolgreich" : "nicht") + " angelegt");
+
+        Logger.info(fact.getSendungSuchen().sendungSuchen(sendung1.sendungsnummer));
+
+        for(int i = 0; i < 50; i++) {
+            Logger.debug("Ihre Sendungsnummer ist: " + SendungManager.generateSendungsnummer());
+        }
 
         fact.destroy();
         Logger.info("Program complete");

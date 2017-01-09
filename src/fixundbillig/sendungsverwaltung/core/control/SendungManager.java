@@ -27,9 +27,43 @@ public class SendungManager {
         return ourInstance;
     }
 
+    public static String generateSendungsnummer() {
+        Set<String> set = new HashSet<>();
+        SendungManager m = SendungManager.getInstance();
+        for(Sendung s : m.getSendungen()) {
+            set.add(s.getSendungsnummer());
+        }
+        String randomString;
+        boolean existing = false;
+        do {
+            randomString = "";
+            for(int i = 0; i < 10; i++) {
+                int random = (int) (Math.random() * 61);
+                if (random < 10) {
+                    randomString += random;
+                    continue;
+                }
+                if (random >= 10 && random < 36) {
+                    randomString += (char) (random + 55);
+                    continue;
+                }
+                randomString += (char) (random + 61);
+            }
+            for(String s : set) if (s.equals(randomString)) existing = true;
+        } while(existing);
+
+
+        return randomString;
+    }
+
     public static final String tabelle = "SENDUNG";
     @SuppressWarnings("ConstantConditions")
     public static final Configurator.SendungDB config = Configurator.getInstance().database.Sendung;
+
+    private Set<Sendung> getSendungen() {
+        return sendungen;
+    }
+
     private final Set<Sendung> sendungen;
     private final ISQLConnector connector;
 
