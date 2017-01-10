@@ -19,6 +19,7 @@ import java.util.Set;
  * @author Don
  * @since 02.01.2017
  */
+@SuppressWarnings("WeakerAccess")
 public class PackstueckManager {
 
     private final Set<Packstueck> packstuecke;
@@ -131,7 +132,7 @@ public class PackstueckManager {
     public Packstueck getPackstueck(PackstueckTO packstueckTO) {
         Packstueck find = null;
         for (Packstueck packstueck : packstuecke) {
-            if (packstueckTO.id == packstueck.getId()) {
+            if (packstueckTO.id.equals(packstueck.getId())) {
                 find = packstueck;
                 break;
             }
@@ -148,7 +149,6 @@ public class PackstueckManager {
             String s = packstueck.getSendung().getSendungsnummer();
             if (sendungsnummer.equals(s)) {
                 find.add(packstueck);
-                break;
             }
         }
         return find;

@@ -26,7 +26,8 @@ public class GUIMain extends Application {
 
     private Stage fenster;
     private Scene start, sAnlegen, sVerfolgen;
-    private ObservableList<PackstueckTO> tableList = FXCollections.observableArrayList();
+    //private ObservableList<PackstueckTO> tableList = FXCollections.observableArrayList();
+    private List<PackstueckTO> tableList = new ArrayList<>();
     private String sNummerString;
 
     public static void main(String[] args){launch(args);}
@@ -88,7 +89,8 @@ public class GUIMain extends Application {
                     "Sind Sie sicher, dass Sie den Vorgang abbrechen möchten?");
             if(abbrechen)
                 sNummerString = null;
-                tableList.clear();
+                //tableList.clear();
+                tableList = null;
                 fenster.setScene(start);
         });
 
@@ -98,15 +100,15 @@ public class GUIMain extends Application {
 
         // --- Packstück Tabelle ---
         // --- Columns ---
-        TableColumn<PackstueckTO, Integer> idColumn = new TableColumn<>("Packstück ID");
+        TableColumn<PackstueckTO, String> idColumn = new TableColumn<>("Packstück ID");
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         TableColumn<PackstueckTO, Integer> refnrColumn = new TableColumn<>("Referenznummer");
         refnrColumn.setCellValueFactory(new PropertyValueFactory<>("refnr"));
         TableColumn<PackstueckTO, Paketart> paketartColumn = new TableColumn<>("Paketart");
         paketartColumn.setCellValueFactory(new PropertyValueFactory<>("paketart"));
-        TableColumn<PackstueckTO, Integer> volumenColumn = new TableColumn<>("Volumen");
+        TableColumn<PackstueckTO, Double> volumenColumn = new TableColumn<>("Volumen");
         volumenColumn.setCellValueFactory(new PropertyValueFactory<>("volumen"));
-        TableColumn<PackstueckTO, Integer> gewichtColumn = new TableColumn<>("Gewicht");
+        TableColumn<PackstueckTO, Double> gewichtColumn = new TableColumn<>("Gewicht");
         gewichtColumn.setCellValueFactory(new PropertyValueFactory<>("gewicht"));
         TableColumn<PackstueckTO, String> lagerortColumn = new TableColumn<>("Lagerort");
         lagerortColumn.setCellValueFactory(new PropertyValueFactory<>("lagerort"));
@@ -127,7 +129,7 @@ public class GUIMain extends Application {
                         for (PackstueckTO pTO : tableList) {
                             sPacktuecke.add(pTO);
                         }
-                        sendungSpeichern(dateSNummer.getText(), adresse, sKundenNrField.getText(), sTransAuftragField.getText(), sPacktuecke, fact);
+                        sendungSpeichern(/*dateSNummer.getText()*/sNummerString, adresse, sKundenNrField.getText(), sTransAuftragField.getText(), sPacktuecke, fact);
                     }
                 } else {
                     GUIFehlerBox.display("Keine gültige Adresse", "Die eingegebene Adresse ist nicht gültig.");
@@ -139,10 +141,11 @@ public class GUIMain extends Application {
 
         // --- Paket anlegen Call ---
         sPackstueckBtn.setOnAction(e -> {
-            PackstueckTO neuesPackstueck = GUIPackstueckErstellen.display(dateSNummer.getText());
-            //System.out.println(neuesPackstueck);
+            PackstueckTO neuesPackstueck = GUIPackstueckErstellen.display(sNummerString);
             tableList.add(neuesPackstueck);
-            sPackstuekListe.setItems(tableList);
+            //ObservableList<PackstueckTO> packstueckListe = FXCollections.observableArrayList(tableList);
+            //sPackstuekListe.setItems(packstueckListe);
+            sPackstuekListe.getItems().add(neuesPackstueck);
         });
 
         // --- Anlegen Layout ---
@@ -195,7 +198,7 @@ public class GUIMain extends Application {
         });
 
         // --- Packstück Table ---
-        // Table Aufbau mit früher definierten Colums
+        // Table Aufbau mit früher definierten Columns
         TableView<PackstueckTO> pSucheTable = new TableView<>();
         pSucheTable.getColumns().addAll(idColumn,refnrColumn,paketartColumn,volumenColumn,gewichtColumn,lagerortColumn);
 
@@ -214,8 +217,10 @@ public class GUIMain extends Application {
         // --- Search Call --- Die Tabelle wird durch Weitergeben der eingegebenen Sendungsnummer befüllt
         sSuchenBtn.setOnAction(e -> {
             SendungTO sendung = fact.getSendungSuchen().sendungSuchen(sNummerTxtField.getText());
+            pSucheTable.getItems().clear();
             getSendungDetails(sendung,datenAnlagedatum,datenZielortStrasse,datenZielortStadt,datenKundenNr,datenTransAuftrag);
             pSucheTable.setItems(getPackstueckDetails(sendung));
+            System.out.println(sendung.packstuecke);
         });
 
         // --- Suchen Layout ---
