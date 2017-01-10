@@ -30,6 +30,22 @@ public class Adresse {
         return !(!plz.matches(regex) || Integer.parseInt(plz) <= 1001);
     }
 
+    public String getStrasse() {
+        return strasse;
+    }
+
+    public String getHausnummer() {
+        return hausnummer;
+    }
+
+    public String getPlz() {
+        return plz;
+    }
+
+    public String getOrt() {
+        return ort;
+    }
+
     @Override
     public String toString() {
         return "Adresse{" +

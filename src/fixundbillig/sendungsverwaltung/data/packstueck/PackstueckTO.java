@@ -4,7 +4,7 @@ import fixundbillig.sendungsverwaltung.data.utils.Paketart;
 
 @SuppressWarnings("ALL")
 public class PackstueckTO {
-	public int id;
+	public String id;
 	public double volumen;
 	public double gewicht;
 	public int refnr;
@@ -15,7 +15,7 @@ public class PackstueckTO {
 	public PackstueckTO() {
     }
 	
-	public PackstueckTO(int id, int volumen, int gewicht, int refnr,
+	public PackstueckTO(String id, double volumen, double gewicht, int refnr,
 			String sendungsnummer, String lagerort, Paketart paketart) {
 		super();
 		this.id = id;

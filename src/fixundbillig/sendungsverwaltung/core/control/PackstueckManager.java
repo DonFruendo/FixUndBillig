@@ -34,6 +34,36 @@ public class PackstueckManager {
         }
         return ourInstance;
     }
+
+    public static String generatePackstueckID() {
+        Set<String> set = new HashSet<>();
+        PackstueckManager m = PackstueckManager.getInstance();
+        for(Packstueck p : m.getPackstuecke()) {
+            set.add(p.getId());
+        }
+        String randomString;
+        boolean existing = false;
+        do {
+            randomString = "";
+            for(int i = 0; i < 10; i++) {
+                int random = (int) (Math.random() * 61);
+                if (random < 10) {
+                    randomString += random;
+                    continue;
+                }
+                if (random >= 10 && random < 36) {
+                    randomString += (char) (random + 55);
+                    continue;
+                }
+                randomString += (char) (random + 61);
+            }
+            for(String s : set) if (s.equals(randomString)) existing = true;
+        } while(existing);
+
+
+        return randomString;
+    }
+
     private final ISQLConnector connector;
 
     private PackstueckManager() {
@@ -44,7 +74,7 @@ public class PackstueckManager {
     public void init() {
         // make sure table exists
         connector.createTableIfNotExisting(tabelle,
-                config.id + " int",
+                config.id + " string",
                 config.volumen + " double",
                 config.gewicht + " double",
                 config.refnr + " int",
@@ -57,8 +87,9 @@ public class PackstueckManager {
         try {
             ArrayList<DAO_Packstueck> daos = new ArrayList<>();
             while (resultSet.next()) {
-                int id = resultSet.getInt("ID");
-                PackstueckTO to = new PackstueckTO(id, -1, -1, -1, null, null, null);
+                String id = resultSet.getString("ID");
+                PackstueckTO to = new PackstueckTO();
+                to.id = id;
                 daos.add(new DAO_Packstueck(to));
             }
 
@@ -121,5 +152,9 @@ public class PackstueckManager {
             }
         }
         return find;
+    }
+
+    public Set<Packstueck> getPackstuecke() {
+        return packstuecke;
     }
 }

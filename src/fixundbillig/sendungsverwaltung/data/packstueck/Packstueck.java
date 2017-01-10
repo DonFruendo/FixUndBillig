@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Packstueck {
 
     private double volumen;
-    private int id;
+    private String id;
     private int refnr;
     private double gewicht;
     private Sendung sendung;
@@ -22,7 +22,7 @@ public class Packstueck {
         this(packstueck.volumen, packstueck.id, packstueck.refnr, packstueck.gewicht, SendungManager.getInstance().sendungSuchenPerSendungsNr(packstueck.sendungsnummer), packstueck.lagerort, packstueck.paketart);
     }
 
-	public Packstueck(double volumen, int id, int refnr, double gewicht,
+	public Packstueck(double volumen, String id, int refnr, double gewicht,
                       Sendung sendung, String lagerort, Paketart paketart) {
         this.volumen = volumen;
         this.id = id;
@@ -33,12 +33,12 @@ public class Packstueck {
         this.paketart = paketart;
 	}
 
-	public boolean update(double volumen, int id, int refnr, double gewicht,
+	public boolean update(double volumen, String id, int refnr, double gewicht,
                           Sendung sendung, String lagerort, Paketart paketart) {
         boolean result = false;
 
         if(!(this.volumen == volumen)) result = true;
-        if(!(this.id == id)) result = true;
+        if(!(this.id.equals(id))) result = true;
         if(!(this.refnr == refnr)) result = true;
         if(!(this.gewicht == gewicht)) result = true;
         if(!this.sendung.equals(sendung)) result = true;
@@ -72,7 +72,7 @@ public class Packstueck {
         return volumen;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -104,7 +104,7 @@ public class Packstueck {
         this.volumen = volumen;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
