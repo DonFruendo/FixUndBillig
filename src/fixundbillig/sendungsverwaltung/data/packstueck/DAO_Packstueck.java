@@ -60,19 +60,19 @@ public class DAO_Packstueck implements IDAO_Packstueck {
     }
 
     @Override
-    public void packstueckdatenLoeschen(int id) {
+    public void packstueckdatenLoeschen(String id) {
 
     }
 
     @Override
-    public void packstueckdatenSuchenPerId(int id) {
+    public void packstueckdatenSuchenPerId(String id) {
         //
         String query = "SELECT * FROM " + tabelle + " WHERE ID='" + id + "';";
         ResultSet resultSet = connector.getQuery(query);
         try {
             if (resultSet.next()) {
                 PackstueckTO to = new PackstueckTO();
-                to.id = resultSet.getInt(config.id);
+                to.id = resultSet.getString(config.id);
                 to.volumen = resultSet.getDouble(config.volumen);
                 to.gewicht = resultSet.getDouble(config.gewicht);
                 to.refnr = resultSet.getInt(config.refnr);

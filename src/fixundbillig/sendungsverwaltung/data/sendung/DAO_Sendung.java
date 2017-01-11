@@ -35,6 +35,7 @@ public class DAO_Sendung implements IDAO_Sendung {
         // check if object is already existing
         boolean newObject = true;
         String statement = "SELECT " + config.id + " FROM " + tabelle;
+        Logger.debug(statement);
         ResultSet resultSet = connector.getQuery(statement);
         try {
             while (resultSet.next()) {

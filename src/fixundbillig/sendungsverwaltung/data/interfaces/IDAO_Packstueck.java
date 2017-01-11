@@ -6,7 +6,7 @@ import fixundbillig.sendungsverwaltung.data.packstueck.PackstueckTO;
 public interface IDAO_Packstueck {
 	void packstueckdatenAnlegen();
 	void packstueckdatenAendern(PackstueckTO daten);
-	void packstueckdatenLoeschen(int id);
-	void packstueckdatenSuchenPerId(int id);
+	void packstueckdatenLoeschen(String id);
+	void packstueckdatenSuchenPerId(String id);
 	void packstueckdatenSuchenPerRefNr(int refnr);
 }

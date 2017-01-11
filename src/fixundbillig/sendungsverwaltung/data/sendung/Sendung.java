@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("WeakerAccess")
 public class Sendung {
 
-    private String sendungsnummer; // TODO Generate
+    private String sendungsnummer; //Generate
     private LocalDate anlagedatum;
     private Adresse zielort;
     private String transportauftrag;
