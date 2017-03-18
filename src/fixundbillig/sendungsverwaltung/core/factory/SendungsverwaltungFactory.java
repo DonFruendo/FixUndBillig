@@ -9,6 +9,12 @@ import fixundbillig.sendungsverwaltung.data.interfaces.IPackstueckAnlegen;
 import fixundbillig.sendungsverwaltung.data.interfaces.ISendungAnlegen;
 import fixundbillig.sendungsverwaltung.data.interfaces.ISendungsverwaltungFactory;
 
+/**
+ * Created by Don on 07.01.2017.
+ *
+ * @author Don
+ * @since 07.01.2017
+ */
 @SuppressWarnings("ALL")
 public class SendungsverwaltungFactory implements ISendungsverwaltungFactory {
     private static SendungsverwaltungFactory ourInstance;

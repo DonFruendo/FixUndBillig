@@ -2,6 +2,12 @@ package fixundbillig.sendungsverwaltung.data.packstueck;
 
 import fixundbillig.sendungsverwaltung.data.utils.Paketart;
 
+/**
+ * Created by Don on 21.12.2016.
+ *
+ * @author Don
+ * @since 21.21.2016
+ */
 @SuppressWarnings("ALL")
 public class PackstueckTO {
 	public String id;

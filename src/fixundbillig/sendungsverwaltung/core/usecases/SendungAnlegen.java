@@ -11,6 +11,12 @@ import fixundbillig.sendungsverwaltung.data.sendung.SendungTO;
 import fixundbillig.sendungsverwaltung.data.utils.Adresse;
 import fixundbillig.sendungsverwaltung.data.utils.Logger;
 
+/**
+ * Created by Don on 07.01.2017.
+ *
+ * @author Don
+ * @since 07.01.2017
+ */
 public class SendungAnlegen implements ISendungAnlegen {
 
 	public boolean adresseValidieren(Adresse adresse) {

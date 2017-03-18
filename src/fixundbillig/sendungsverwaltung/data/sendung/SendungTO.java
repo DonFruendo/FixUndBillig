@@ -6,6 +6,12 @@ import fixundbillig.sendungsverwaltung.data.utils.Adresse;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Created by Don on 02.01.2017.
+ *
+ * @author Don
+ * @since 02.01.2017
+ */
 public class SendungTO {
 	public String sendungsnummer;
 	public LocalDate anlagedatum;

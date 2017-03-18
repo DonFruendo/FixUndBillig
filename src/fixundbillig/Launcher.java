@@ -13,6 +13,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by Don on 01.01.2017.
+ *
+ * @author Don
+ * @since 01.01.2017
+ */
 class Launcher {
     public static void main(String[] args) {
         Logger.info("Hello World!");

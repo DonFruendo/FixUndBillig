@@ -9,7 +9,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
+/**
+ * Created by Don on 21.12.2016.
+ *
+ * @author Don
+ * @since 21.12.2016
+ */
 public class H2Connector implements ISQLConnector {
     private static JdbcConnectionPool pool;
 

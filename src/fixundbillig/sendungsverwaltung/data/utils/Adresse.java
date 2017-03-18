@@ -1,5 +1,9 @@
 package fixundbillig.sendungsverwaltung.data.utils;
 
+/**
+ * @author Tobias Freund
+ * @since 03.01.2017
+ */
 public class Adresse {
     private final String strasse;
     private final String hausnummer;

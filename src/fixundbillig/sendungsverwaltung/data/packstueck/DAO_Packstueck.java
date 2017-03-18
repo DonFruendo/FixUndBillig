@@ -12,6 +12,12 @@ import java.sql.SQLException;
 import static fixundbillig.sendungsverwaltung.core.control.PackstueckManager.config;
 import static fixundbillig.sendungsverwaltung.core.control.PackstueckManager.tabelle;
 
+/**
+ * Created by Don on 21.12.2016.
+ *
+ * @author Don
+ * @since 21.21.2016
+ */
 public class DAO_Packstueck implements IDAO_Packstueck {
 
     private PackstueckTO packstueck;

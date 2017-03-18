@@ -5,6 +5,12 @@ import fixundbillig.sendungsverwaltung.data.interfaces.IPackstueckAnlegen;
 import fixundbillig.sendungsverwaltung.data.packstueck.DAO_Packstueck;
 import fixundbillig.sendungsverwaltung.data.packstueck.PackstueckTO;
 
+/**
+ * Created by Don on 07.01.2017.
+ *
+ * @author Don
+ * @since 07.01.2017
+ */
 public class PackstueckAnlegen implements IPackstueckAnlegen {
 
 	public void packstueckdatenSpeichern(PackstueckTO packstueck) {

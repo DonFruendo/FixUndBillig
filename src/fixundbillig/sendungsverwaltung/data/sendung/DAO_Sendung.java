@@ -13,6 +13,12 @@ import java.time.LocalDate;
 import static fixundbillig.sendungsverwaltung.core.control.SendungManager.config;
 import static fixundbillig.sendungsverwaltung.core.control.SendungManager.tabelle;
 
+/**
+ * Created by Don on 02.01.2017.
+ *
+ * @author Don
+ * @since 02.01.2017
+ */
 public class DAO_Sendung implements IDAO_Sendung {
 
     private SendungTO daten;
